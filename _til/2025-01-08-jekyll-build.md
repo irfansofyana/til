@@ -3,6 +3,7 @@ layout: post
 title: "Jekyll build"
 date: 2025-01-08
 category: Jekyll
+description: "Jekyll build issue between local and GitHub actions"
 tags: [jekyll, Github Pages]
 ---
 
