@@ -1,6 +1,6 @@
 # Today I Learned Template
 
-A GitHub Pages template for creating your own Today I Learned (TIL) website. Document and share your daily learnings in an organized and searchable way. This project is inspired by https://til.simonwillison.net/ and some others that I found.
+A GitHub Pages template for creating your own Today I Learned (TIL) website. Document and share your daily learnings in an organized and searchable way. This project is inspired by <https://til.simonwillison.net/> and some others that I found.
 
 ## Features
 
@@ -23,6 +23,7 @@ A GitHub Pages template for creating your own Today I Learned (TIL) website. Doc
    - Update `url` if using a custom domain
 
 3. Add your TILs in the `_til` directory following the format:
+
    ```markdown
    ---
    layout: post
@@ -44,6 +45,7 @@ A GitHub Pages template for creating your own Today I Learned (TIL) website. Doc
 ### Site Configuration
 
 1. Update `_config.yml` with your preferences:
+
    ```yaml
    title: "Today I Learned"
    html_title: "TIL - Your Daily Learning Notes"
@@ -69,6 +71,7 @@ A GitHub Pages template for creating your own Today I Learned (TIL) website. Doc
 
 1. Create a new file in the `_til` directory with the format: `YYYY-MM-DD-title-slug.md`
 2. Add the front matter:
+
    ```markdown
    ---
    layout: post
@@ -78,62 +81,62 @@ A GitHub Pages template for creating your own Today I Learned (TIL) website. Doc
    tags: [tag1, tag2]
    ---
    ```
+
 3. Write your content in Markdown below the front matter
 
 ### Option 2: Using the Command Line
 
 1. From your project root, run:
+
    ```bash
    # Replace the title with your post title (use quotes for multiple words)
    DATE=$(date +%Y-%m-%d) TITLE="your-title" && touch "_til/$DATE-$TITLE.md"
    ```
 
-2. Use this template for your new post:
+2. This is an example template for your new post:
+
    ```markdown
-   ---
-   layout: post
-   title: "Your Title Here"
-   date: YYYY-MM-DD
-   category: Category
-   tags: [tag1, tag2]
-   ---
+      ---
+      layout: post
+      title: "Your Title Here"
+      date: YYYY-MM-DD
+      category: Category
+      tags: [tag1, tag2]
+      ---
 
-   ## What I Learned
+      ## What I Learned
 
-   Brief description of what you learned.
+      Brief description of what you learned.
 
-   ## Why It's Useful
+      ## Why It's Useful
 
-   Explain why this knowledge is valuable.
+      Explain why this knowledge is valuable.
+      
+      ## References
 
-   ## Example
-
-   ```code
-   # Your code example here
-   ```
-
-   ## References
-
-   - [Link Description](URL)
-   ```
+      Any references for your TILs
+      ```
 
 ### Categories vs Tags
 
 When creating a new TIL post, you'll need to specify both a category and tags. Here's how to use them:
 
 ### Categories
+
 - Use **one** category per post
 - Categories represent the main technology or domain of your learning
 - Should be a single word or simple term
 - Examples: `Jekyll`, `Docker`, `Git`, `Python`, `AWS`
 
 ### Tags
+
 - Can use **multiple** tags per post
 - Tags are more specific descriptors or sub-topics
 - Help in detailed classification and searching
 - Examples: `deployment`, `caching`, `optimization`, `security`
 
 Example frontmatter:
+
 ```yaml
 ---
 layout: post
@@ -163,12 +166,14 @@ tags: [containers, optimization, caching, deployment]
 ### Running the Site
 
 1. Clone your repository:
+
    ```bash
    git clone <your-repository-url>
    cd <repository-name>
    ```
 
 2. Start the development server:
+
    ```bash
    docker-compose up
    ```
@@ -180,16 +185,19 @@ The site will automatically rebuild when you make changes to any source files.
 ### Docker Commands
 
 - Stop the server:
+
   ```bash
   docker-compose down
   ```
 
 - Rebuild the container (after Gemfile changes):
+
   ```bash
   docker-compose up --build
   ```
 
 - View logs:
+
   ```bash
   docker-compose logs
   ```
