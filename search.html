@@ -12,7 +12,7 @@ title: Search
     </ul>
 </div>
 
-<link rel="stylesheet" href="{{ site.baseurl }}/assets/css/search.css">
+<link rel="stylesheet" href="{{ '/assets/css/search.css' | relative_url }}">
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.6.2"></script>
 
 <div class="search-container">
@@ -26,6 +26,9 @@ title: Search
 </div>
 
 <script>
+    // Pre-compute URLs
+    const tagsBaseUrl = "{{ '/tags' | relative_url }}";
+    
     // Initialize search data
     const searchStore = {
         {% for post in site.til %}
@@ -148,7 +151,7 @@ title: Search
                                 ${tags.length ? `
                                     <div class="tags">
                                         ${tags.map(tag => `
-                                            <a href="{{ site.baseurl }}/tags#${tag.toLowerCase()}" 
+                                            <a href="${tagsBaseUrl}#${tag.toLowerCase()}"
                                                class="tag">${tag}</a>
                                         `).join('')}
                                     </div>

@@ -1,6 +1,6 @@
 title: Irfan's TIL
 html_title: "Irfan's TIL" # This will be used in the browser tab
-site_name: "Today I Learned" # This will be used in the header and footer
+site_name: "Irfan Sofyana Putra's TIL" # This will be used in the header and footer
 description: A collection of things I learn from day to day
 baseurl: "/" # Change this to your repo name if not using custom domain
 url: "https://til.irfansp.dev" # Change this to your site URL
