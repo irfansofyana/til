@@ -1,0 +1,47 @@
+title: Today I Learned
+html_title: "TIL - Your Daily Learning Notes" # This will be used in the browser tab
+site_name: "Today I Learned" # This will be used in the header and footer
+description: A collection of things I learn day to day
+baseurl: "/til-template" # Change this to your repo name if not using custom domain
+url: "https://irfansp.dev" # Change this to your site URL
+
+# Build settings
+markdown: kramdown
+highlighter: rouge
+kramdown:
+  syntax_highlighter: rouge
+plugins:
+  - jekyll-feed
+  - jekyll-seo-tag
+
+# Collection settings
+collections:
+  til:
+    output: true
+    permalink: /til/:categories/:title/
+
+# Default layouts
+defaults:
+  - scope:
+      path: ""
+      type: "til"
+    values:
+      layout: "post"
+  - scope:
+      path: "index.html"
+    values:
+      layout: "default"
+  - scope:
+      path: ""
+    values:
+      layout: "default"
+
+# Exclude from processing
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - node_modules
+  - vendor
+  - .git/
+  - .github/
+  - .gitignore

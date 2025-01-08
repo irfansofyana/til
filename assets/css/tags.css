@@ -1,0 +1,152 @@
+.category-section {
+    margin-bottom: 3rem;
+    padding: 1.5rem;
+    background: var(--secondary-bg);
+    border-radius: 8px;
+}
+
+.category-heading {
+    color: var(--text-color);
+    font-size: 1.8rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid var(--border-color);
+}
+
+.til-tags {
+    display: inline-flex;
+    gap: 0.5rem;
+    margin-right: 1rem;
+}
+
+.tag {
+    font-size: 0.75rem;
+    padding: 0.2rem 0.6rem;
+    background: var(--tag-bg);
+    border-radius: 12px;
+    color: var(--tag-text);
+    border: 1px solid var(--tag-border);
+    transition: all 0.2s ease;
+    font-weight: 500;
+    text-decoration: none;
+    letter-spacing: 0.01em;
+}
+
+.tag:hover {
+    background: var(--tag-hover-bg);
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.til-entry {
+    margin-bottom: 1.5rem;
+    padding: 1rem;
+    background: var(--bg-color);
+    border-radius: 6px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.til-title {
+    margin-bottom: 0.5rem;
+}
+
+.til-meta {
+    font-size: 0.9rem;
+    color: var(--text-color);
+    opacity: 0.7;
+    margin-bottom: 0.5rem;
+}
+
+.til-description {
+    color: var(--text-color);
+    opacity: 0.9;
+    font-size: 0.95rem;
+    line-height: 1.5;
+}
+
+.til-content {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 2rem 1rem;
+    line-height: 1.6;
+}
+
+.til-content h1 {
+    font-size: 2.5rem;
+    margin-bottom: 3rem;
+    color: var(--text-color);
+}
+
+.til-content h2:first-child {
+    margin-top: 0;
+}
+
+.til-content h2 {
+    font-size: 1.8rem;
+    margin-top: 3rem;
+    margin-bottom: 1.5rem;
+    color: var(--text-color);
+    border-bottom: 2px solid var(--border-color);
+    padding-bottom: 0.5rem;
+}
+
+.post {
+    margin-bottom: 2rem;
+    padding-left: 1rem;
+}
+
+.post h3 {
+    font-size: 1.4rem;
+    margin-bottom: 0.5rem;
+}
+
+.post h3 a {
+    color: var(--text-color);
+    text-decoration: none;
+}
+
+.post h3 a:hover {
+    color: var(--link-hover-color);
+}
+
+.post p {
+    color: var(--text-color);
+    opacity: 0.8;
+    margin: 0.5rem 0;
+}
+
+.meta {
+    font-size: 0.9rem;
+    color: var(--text-color);
+    opacity: 0.7;
+    margin-top: 0.5rem;
+}
+
+.tag {
+    color: var(--tag-text);
+    margin-right: 0.5rem;
+    text-decoration: none;
+}
+
+.tag:hover {
+    text-decoration: none;
+    opacity: 0.9;
+}
+
+@media (max-width: 600px) {
+    .til-content {
+        padding: 1rem;
+    }
+    
+    .til-content h1 {
+        font-size: 2rem;
+    }
+    
+    .til-content h2 {
+        font-size: 1.5rem;
+    }
+    
+    .post h3 {
+        font-size: 1.2rem;
+    }
+}

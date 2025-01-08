@@ -1,0 +1,47 @@
+---
+layout: default
+title: Categories
+---
+
+<div class="content-list">
+    <div class="all-items-list">
+        {% assign categories = site.til | map: 'category' | compact | uniq | sort %}
+        {% for category in categories %}
+            {% if category and category != empty %}
+                {% assign category_posts = site.til | where: "category", category %}
+                <a href="#{{ category | slugify }}" class="item-link" data-count="{{ category_posts.size }}">{{ category }}</a>
+            {% endif %}
+        {% endfor %}
+    </div>
+
+    <div class="items-content">
+        {% for category in categories %}
+            {% if category and category != empty %}
+            <div class="list-group" id="{{ category | slugify }}">
+                <h2 class="list-header">{{ category }}</h2>
+                <ul>
+                {% assign category_posts = site.til | where: "category", category | sort: "date" | reverse %}
+                {% for post in category_posts %}
+                    <li>
+                        <a href="{{ post.url | relative_url }}">{{ post.title }}</a>
+                        <span class="post-date">({{ post.date | date: "%B %-d, %Y" }})</span>
+                    </li>
+                {% endfor %}
+                </ul>
+            </div>
+            {% endif %}
+        {% endfor %}
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        if (window.location.hash) {
+            const categoryId = window.location.hash.substring(1);
+            const element = document.getElementById(categoryId);
+            if (element) {
+                element.scrollIntoView();
+            }
+        }
+    });
+</script>
