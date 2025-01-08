@@ -352,10 +352,10 @@ nav .container {
     color: var(--tag-text);
     text-decoration: none;
     background-color: var(--tag-bg);
-    padding: 0.2rem 0.5rem;
-    border-radius: 4px;
+    padding: 0.15rem 0.35rem;
+    border-radius: 3px;
     border: 1px solid var(--tag-border);
-    font-size: 0.9rem;
+    font-size: 0.75rem;
     transition: background-color 0.2s ease;
 }
 
@@ -410,10 +410,10 @@ nav .container {
 .tag {
     display: inline-flex;
     align-items: center;
-    padding: 0.25rem 0.75rem;
-    border-radius: 15px;
+    padding: 0.15rem 0.35rem;
+    border-radius: 3px;
     text-decoration: none;
-    font-size: 0.85rem;
+    font-size: 0.75rem;
     background-color: var(--tag-bg);
     color: var(--tag-text);
     border: 1px solid var(--tag-border);
@@ -436,22 +436,12 @@ nav .container {
 }
 
 .category-link {
-    display: inline-block;
-    padding: 0.15rem 0.4rem;
-    font-size: 0.65rem;
     color: var(--category-text);
-    background-color: var(--category-bg);
-    border: 1px solid var(--category-border);
-    border-radius: 12px;
     text-decoration: none;
-    transition: all 0.2s ease;
-    font-weight: 500;
-    margin-left: 0.5rem;
 }
 
 .category-link:hover {
-    background-color: var(--category-hover-bg);
-    transform: translateY(-1px);
+    text-decoration: underline;
 }
 
 /* Search */
@@ -485,12 +475,8 @@ nav .container {
 }
 
 .category-link {
-    display: inline-block;
-    margin-right: 1rem;
-    margin-bottom: 0.5rem;
     color: var(--category-text);
     text-decoration: none;
-    font-size: 0.9rem;
 }
 
 .category-link:hover {
@@ -535,8 +521,7 @@ nav .container {
     border-radius: 8px;
 }
 
-.tag,
-.category-link {
+.tag {
     display: inline-block;
     padding: 0.25rem 0.75rem;
     border-radius: 15px;
@@ -556,16 +541,6 @@ nav .container {
     transform: translateY(-1px);
 }
 
-.category-link {
-    background-color: var(--category-bg);
-    color: var(--category-text);
-    border: 1px solid var(--category-border);
-}
-
-.category-link:hover {
-    background-color: var(--category-hover-bg);
-    transform: translateY(-1px);
-}
 
 .tags-page section,
 .categories-page section {

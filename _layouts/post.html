@@ -10,7 +10,7 @@ layout: default
         <div class="post-meta">
             <span class="date-category">
                 <time datetime="{{ page.date | date_to_xmlschema }}">{{ page.date | date: "%B %-d, %Y" }}</time>
-                {% if page.category %} - <a href="{{ '/categories' | relative_url }}#{{ page.category | slugify }}" class="category-link">{{ page.category }}</a>{% endif %}
+                {% if page.category %} • <a href="{{ '/categories' | relative_url }}#{{ page.category | slugify }}" class="category-link">{{ page.category }}</a>{% endif %}
             </span>
         </div>
         {% if page.tags.size > 0 %}
