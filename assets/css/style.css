@@ -1815,3 +1815,35 @@ body:has(.home-wrapper) > .container > *:not(.home-wrapper) {
     padding: 0.1rem 0.4rem;
     border-radius: 10px;
 }
+
+/* Code block styles */
+pre {
+    overflow-x: auto;
+    white-space: pre;
+    word-wrap: normal;
+    background-color: var(--code-bg);
+    border-radius: 6px;
+    padding: 1rem;
+    margin: 1rem 0;
+}
+
+pre code {
+    display: block;
+    min-width: 100%;
+    padding: 0;
+    background: none;
+}
+
+code {
+    font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace;
+    font-size: 0.9em;
+    padding: 0.2em 0.4em;
+    background-color: var(--code-bg);
+    border-radius: 3px;
+}
+
+.highlight {
+    position: relative;
+    overflow-x: auto;
+    background-color: var(--code-bg);
+}
