@@ -6,6 +6,7 @@ baseurl: "/" # Change this to your repo name if not using custom domain
 url: "https://til.irfansp.dev" # Change this to your site URL
 
 # Build settings
+future: true
 markdown: kramdown
 highlighter: rouge
 kramdown:
