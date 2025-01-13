@@ -21,8 +21,8 @@ As described, devcontainers are excellent for provisioning development environme
 
 Over the holiday, I created two repositories to explore devcontainers:
 
-- [irfansofyana/devcontainer-features](https://github.com/irfansofyana/devcontainer-features)
-- [irfansofyana/devcontainer-templates](https://github.com/irfansofyana/devcontainer-templates)
+    - [irfansofyana/devcontainer-features](https://github.com/irfansofyana/devcontainer-features)
+    - [irfansofyana/devcontainer-templates](https://github.com/irfansofyana/devcontainer-templates)
 
 ### Devcontainer-Features
 
@@ -30,8 +30,8 @@ Devcontainer-features are self-contained, shareable units of installation code a
 
 I created devcontainer-features for some tools I frequently use in local development that I couldn’t find pre-existing features for, such as:
 
-- [kcat](https://github.com/edenhill/kcat): A tool for producing, consuming, and inspecting Kafka messages.
-- [lazydocker](https://github.com/jesseduffield/lazydocker): A simple terminal UI for managing Docker containers.
+    - [kcat](https://github.com/edenhill/kcat): A tool for producing, consuming, and inspecting Kafka messages.
+    - [lazydocker](https://github.com/jesseduffield/lazydocker): A simple terminal UI for managing Docker containers.
 
 ### Devcontainer-Templates
 
@@ -39,13 +39,13 @@ Devcontainer-templates are collections of source files packaged together to conf
 
 I currently created a [go-toolkit](https://github.com/irfansofyana/devcontainer-templates/tree/main/src/go-toolkit) devcontainer-template, which includes a variety of tools and services for building Go-based services. Some tools and services included are:
 
-- Kafka
-- MySQL
-- Redis
-- Adminer (DB UI)
-- Kafka UI
-- Go VS Code extensions
-- And more
+    - Kafka
+    - MySQL
+    - Redis
+    - Adminer (DB UI)
+    - Kafka UI
+    - Go VS Code extensions
+    - And more
 
 ## Final Thoughts
 
