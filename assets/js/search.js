@@ -44,8 +44,12 @@
         const idx = lunr(function () {
             this.ref('id');
             this.field('title', { boost: 10 });
-            this.field('content');
-            this.field('tags');
+            this.field('content', { boost: 5 });
+            this.field('tags', { boost: 3 });
+
+            // Enable fuzzy matching by default
+            this.pipeline.remove(lunr.stemmer);
+            this.searchPipeline.remove(lunr.stemmer);
 
             for (const key in window.store) {
                 this.add({
@@ -57,7 +61,13 @@
             }
         });
 
-        const results = idx.search(searchTerm);
+        // Process search term to be more forgiving
+        const processedTerm = searchTerm.split(' ').map(term => {
+            // Add fuzzy matching and wildcards
+            return `${term}~1 ${term}* *${term}*`;
+        }).join(' ');
+
+        const results = idx.search(processedTerm);
         displaySearchResults(results, window.store);
     }
 
@@ -73,8 +83,12 @@
         const idx = lunr(function () {
             this.ref('id');
             this.field('title', { boost: 10 });
-            this.field('content');
-            this.field('tags');
+            this.field('content', { boost: 5 });
+            this.field('tags', { boost: 3 });
+
+            // Enable fuzzy matching by default
+            this.pipeline.remove(lunr.stemmer);
+            this.searchPipeline.remove(lunr.stemmer);
 
             for (const key in window.store) {
                 this.add({
@@ -86,7 +100,13 @@
             }
         });
 
-        const results = idx.search(searchTerm);
+        // Process search term to be more forgiving
+        const processedTerm = searchTerm.split(' ').map(term => {
+            // Add fuzzy matching and wildcards
+            return `${term}~1 ${term}* *${term}*`;
+        }).join(' ');
+
+        const results = idx.search(processedTerm);
         displaySearchResults(results, window.store);
     });
 })();

@@ -34,13 +34,20 @@ title: Search
         {% for post in site.til %}
         "{{ post.url | slugify }}": {
             "title": "{{ post.title | xml_escape }}",
-            "content": {{ post.content | strip_html | strip_newlines | jsonify }},
+            "content": {{ post.content | strip_html | strip_newlines | escape | jsonify }},
             "url": "{{ post.url | xml_escape | relative_url }}",
             "date": "{{ post.date | date: '%B %-d, %Y' }}",
             "tags": "{{ post.tags | join: ', ' }}"
         }{% unless forloop.last %},{% endunless %}
         {% endfor %}
     };
+
+    // Debug: Log all indexed content
+    console.log('Indexed Documents:');
+    Object.entries(searchStore).forEach(([url, item]) => {
+        console.log(`\nDocument: ${url}`);
+        console.log('Content:', item.content);
+    });
 
     // Convert store to array for Fuse.js
     const searchData = Object.entries(searchStore).map(([id, item]) => ({
@@ -52,13 +59,26 @@ title: Search
     const fuseOptions = {
         includeScore: true,
         threshold: 0.3,
+        ignoreLocation: true,
         keys: [
-            { name: 'title', weight: 0.7 },
-            { name: 'content', weight: 0.3 },
-            { name: 'tags', weight: 0.5 }
+            { 
+                name: 'title',
+                weight: 0.5
+            },
+            { 
+                name: 'content',
+                weight: 1.0
+            },
+            { 
+                name: 'tags',
+                weight: 0.4
+            }
         ],
         shouldSort: true,
-        minMatchCharLength: 2
+        minMatchCharLength: 2,
+        findAllMatches: true,
+        location: 0,
+        distance: 10000
     };
 
     let fuse;
@@ -122,7 +142,32 @@ title: Search
     function highlightText(text, searchTerm) {
         if (!searchTerm) return text;
         const regex = new RegExp(`(${searchTerm})`, 'gi');
-        return text.replace(regex, '<span class="search-highlight">$1</span>');
+        return text.replace(regex, '<mark class="search-highlight">$1</mark>');
+    }
+
+    function getContentSnippet(content, searchTerm) {
+        if (!content || !searchTerm) return '';
+        
+        const searchTermLower = searchTerm.toLowerCase();
+        const contentLower = content.toLowerCase();
+        const matchIndex = contentLower.indexOf(searchTermLower);
+        
+        if (matchIndex === -1) return '';
+        
+        const snippetStart = Math.max(0, matchIndex - 100);
+        const snippetEnd = Math.min(content.length, matchIndex + searchTerm.length + 100);
+        let snippet = content.slice(snippetStart, snippetEnd);
+        
+        // Add ellipsis
+        if (snippetStart > 0) snippet = '...' + snippet;
+        if (snippetEnd < content.length) snippet += '...';
+        
+        return highlightText(snippet, searchTerm);
+    }
+
+    function hasExactMatch(text, searchTerm) {
+        if (!text || !searchTerm) return false;
+        return text.toLowerCase().includes(searchTerm.toLowerCase());
     }
 
     function performSearch(searchTerm) {
@@ -135,31 +180,49 @@ title: Search
         }
 
         try {
-            const results = fuse.search(searchTerm);
+            const results = fuse.search(searchTerm)
+                // Only keep results that have an exact match in title, content, or tags
+                .filter(result => {
+                    const item = result.item;
+                    return hasExactMatch(item.title, searchTerm) || 
+                           hasExactMatch(item.content, searchTerm) || 
+                           hasExactMatch(item.tags, searchTerm);
+                });
             
             if (results.length > 0) {
                 const resultList = results.map(result => {
                     const item = result.item;
                     const title = highlightText(item.title, searchTerm);
                     const tags = item.tags ? item.tags.split(', ') : [];
+                    const contentSnippet = getContentSnippet(item.content, searchTerm);
+                    
+                    // Only show results with either a title match or content match
+                    if (!contentSnippet && !hasExactMatch(item.title, searchTerm) && !hasExactMatch(item.tags, searchTerm)) {
+                        return '';
+                    }
                     
                     return `
                         <div class="search-result">
                             <h2><a href="${item.url}">${title}</a></h2>
+                            ${contentSnippet ? `
+                                <div class="search-snippet">
+                                    <p>${contentSnippet}</p>
+                                </div>
+                            ` : ''}
                             <div class="search-result-meta">
                                 <time>${item.date}</time>
                                 ${tags.length ? `
                                     <div class="tags">
                                         ${tags.map(tag => `
                                             <a href="${tagsBaseUrl}#${tag.toLowerCase()}"
-                                               class="tag">${tag}</a>
+                                               class="tag">${highlightText(tag, searchTerm)}</a>
                                         `).join('')}
                                     </div>
                                 ` : ''}
                             </div>
                         </div>
                     `;
-                }).join('');
+                }).filter(html => html).join('');
                 
                 searchResults.innerHTML = resultList;
             } else {
