@@ -1866,6 +1866,39 @@ code {
     border-radius: 10px;
 }
 
+/* List styles */
+ul, ol {
+    padding-left: 1.5rem;
+    margin: 0.5rem 0;
+}
+
+li {
+    margin: 0.25rem 0;
+    line-height: 1.5;
+    position: relative;
+}
+
+/* Adjust bullet point alignment */
+ul li {
+    padding-left: 0.5rem;
+}
+
+ul li::marker {
+    color: var(--text-color);
+    font-size: 1.1em;
+}
+
+/* Style for nested lists */
+ul ul, ol ol, ul ol, ol ul {
+    margin: 0.25rem 0;
+}
+
+/* Links in lists */
+li > a {
+    display: inline-block;
+    word-break: break-word;
+}
+
 /* Add responsive styles for Recent Learnings and Popular Tags */
 @media (max-width: 768px) {
     .recent-learnings h1,
