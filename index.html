@@ -9,19 +9,19 @@ title: Home
 
 <div class="home-wrapper">
     <div class="home-content">
-        <section class="statistics">
-            <div class="stats-container">
-                <div class="stat-item">
-                    <span class="stat-number">{{ total_posts }}</span>
-                    <span class="stat-label">TILs</span>
+        <section class="stats-section">
+            <div class="stats-grid">
+                <div class="stats-item">
+                    <span class="stats-number">{{ total_posts }}</span>
+                    <span class="stats-label">Total TILs</span>
                 </div>
-                <div class="stat-item">
-                    <span class="stat-number">{{ site.til | map: "category" | compact | uniq | size }}</span>
-                    <span class="stat-label">Categories</span>
+                <div class="stats-item">
+                    <span class="stats-number">{{ site.til | map: "category" | compact | uniq | size }}</span>
+                    <span class="stats-label">Categories</span>
                 </div>
-                <div class="stat-item">
-                    <span class="stat-number">{{ site.til | map: "tags" | compact | flatten | uniq | size }}</span>
-                    <span class="stat-label">Tags</span>
+                <div class="stats-item">
+                    <span class="stats-number">{{ site.til | map: "tags" | compact | flatten | uniq | size }}</span>
+                    <span class="stats-label">Unique Tags</span>
                 </div>
             </div>
         </section>

@@ -1,7 +1,7 @@
-title: Irfan's TIL
-html_title: "Irfan's TIL" # This will be used in the browser tab
-site_name: "Irfan Sofyana Putra's TIL" # This will be used in the header and footer
-description: A collection of things I learn from day to day
+title: Irfan's TILs
+html_title: "Irfan's TILs" # This will be used in the browser tab
+site_name: "Irfan Sofyana Putra: TILs" # This will be used in the header and footer
+description: Things I have learned. You can also check out brain.irfansp.dev
 baseurl: "/" # Change this to your repo name if not using custom domain
 url: "https://til.irfansp.dev" # Change this to your site URL
 

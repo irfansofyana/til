@@ -1,4 +1,32 @@
 (function() {
+    let searchIndex;
+    let debounceTimeout;
+
+    function initializeIndex() {
+        if (!searchIndex) {
+            searchIndex = lunr(function () {
+                this.ref('id');
+                this.field('title', { boost: 10 });
+                this.field('content', { boost: 5 });
+                this.field('tags', { boost: 3 });
+
+                // Enable fuzzy matching by default
+                this.pipeline.remove(lunr.stemmer);
+                this.searchPipeline.remove(lunr.stemmer);
+
+                for (const key in window.store) {
+                    this.add({
+                        id: key,
+                        title: window.store[key].title,
+                        content: window.store[key].content,
+                        tags: window.store[key].tags
+                    });
+                }
+            });
+        }
+        return searchIndex;
+    }
+
     function displaySearchResults(results, store) {
         const searchResults = document.getElementById('search-results');
         if (results.length) {
@@ -36,57 +64,45 @@
         }
     }
 
-    const searchTerm = getQueryVariable('query');
-
-    if (searchTerm) {
-        document.getElementById('search-input').setAttribute("value", searchTerm);
-
-        const idx = lunr(function () {
-            this.ref('id');
-            this.field('title', { boost: 10 });
-            this.field('content');
-            this.field('tags');
-
-            for (const key in window.store) {
-                this.add({
-                    id: key,
-                    title: window.store[key].title,
-                    content: window.store[key].content,
-                    tags: window.store[key].tags
-                });
-            }
-        });
-
-        const results = idx.search(searchTerm);
-        displaySearchResults(results, window.store);
-    }
-
-    // Live search
-    document.getElementById('search-input').addEventListener('keyup', function(e) {
-        const searchTerm = e.target.value;
-        
+    function performSearch(searchTerm) {
         if (searchTerm === '') {
             document.getElementById('search-results').innerHTML = '';
             return;
         }
 
-        const idx = lunr(function () {
-            this.ref('id');
-            this.field('title', { boost: 10 });
-            this.field('content');
-            this.field('tags');
+        const idx = initializeIndex();
 
-            for (const key in window.store) {
-                this.add({
-                    id: key,
-                    title: window.store[key].title,
-                    content: window.store[key].content,
-                    tags: window.store[key].tags
-                });
-            }
-        });
+        // Process search term with more efficient matching
+        let processedTerm = searchTerm;
+        if (searchTerm.length > 2) {
+            processedTerm = searchTerm.split(' ')
+                .map(term => term.length > 2 ? `${term}~1` : term)
+                .join(' ');
+        }
 
-        const results = idx.search(searchTerm);
+        const results = idx.search(processedTerm);
         displaySearchResults(results, window.store);
+    }
+
+    // Handle URL query parameter search
+    const searchTerm = getQueryVariable('query');
+    if (searchTerm) {
+        document.getElementById('search-input').setAttribute("value", searchTerm);
+        performSearch(searchTerm);
+    }
+
+    // Live search with debouncing
+    document.getElementById('search-input').addEventListener('input', function(e) {
+        const searchTerm = e.target.value;
+        
+        // Clear any pending debounce
+        if (debounceTimeout) {
+            clearTimeout(debounceTimeout);
+        }
+
+        // Set a new debounce timeout
+        debounceTimeout = setTimeout(() => {
+            performSearch(searchTerm);
+        }, 250); // Wait 250ms after user stops typing
     });
 })();

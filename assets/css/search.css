@@ -112,14 +112,23 @@
     color: var(--text-muted);
 }
 
-.search-highlight {
-    background: linear-gradient(120deg, 
-        rgba(var(--primary-color-rgb), 0.15),
-        rgba(var(--primary-color-rgb), 0.25)
-    );
-    padding: 0.1em 0.4em;
+.search-snippet {
+    margin: 0.8rem 0;
+    color: #666;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    background: #f8f9fa;
+    padding: 1rem;
     border-radius: 4px;
-    color: var(--text-color);
+    border-left: 3px solid #dee2e6;
+}
+
+.search-highlight {
+    background-color: #ffd43b;
+    padding: 0.1em 0.2em;
+    border-radius: 2px;
+    color: #000;
+    font-weight: 500;
 }
 
 .search-no-results {
