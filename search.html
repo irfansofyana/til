@@ -29,65 +29,47 @@ title: Search
     // Pre-compute URLs
     const tagsBaseUrl = "{{ '/tags' | relative_url }}";
     
-    // Initialize search data
-    const searchStore = {
-        {% for post in site.til %}
-        "{{ post.url | slugify }}": {
-            "title": "{{ post.title | xml_escape }}",
-            "content": {{ post.content | strip_html | strip_newlines | escape | jsonify }},
-            "url": "{{ post.url | xml_escape | relative_url }}",
-            "date": "{{ post.date | date: '%B %-d, %Y' }}",
-            "tags": "{{ post.tags | join: ', ' }}"
-        }{% unless forloop.last %},{% endunless %}
-        {% endfor %}
-    };
+    // Initialize search data with lazy loading
+    let searchStore = null;
+    let fuse = null;
+    let debounceTimeout = null;
+    const DEBOUNCE_DELAY = 300; // milliseconds
 
-    // Debug: Log all indexed content
-    console.log('Indexed Documents:');
-    Object.entries(searchStore).forEach(([url, item]) => {
-        console.log(`\nDocument: ${url}`);
-        console.log('Content:', item.content);
-    });
+    // Lazy load search data
+    async function initializeSearchStore() {
+        if (searchStore === null) {
+            searchStore = {
+                {% for post in site.til %}
+                "{{ post.url | slugify }}": {
+                    "title": "{{ post.title | xml_escape }}",
+                    "content": {{ post.content | strip_html | strip_newlines | escape | jsonify }},
+                    "url": "{{ post.url | xml_escape | relative_url }}",
+                    "date": "{{ post.date | date: '%B %-d, %Y' }}",
+                    "tags": "{{ post.tags | join: ', ' }}"
+                }{% unless forloop.last %},{% endunless %}
+                {% endfor %}
+            };
 
-    // Convert store to array for Fuse.js
-    const searchData = Object.entries(searchStore).map(([id, item]) => ({
-        id,
-        ...item
-    }));
+            // Initialize Fuse.js with the loaded data
+            const documents = Object.values(searchStore);
+            fuse = new Fuse(documents, {
+                keys: [
+                    { name: 'title', weight: 0.7 },
+                    { name: 'content', weight: 0.3 },
+                    { name: 'tags', weight: 0.3 }
+                ],
+                includeScore: true,
+                threshold: 0.4,
+                ignoreLocation: true
+            });
+        }
+        return searchStore;
+    }
 
-    // Fuse.js options
-    const fuseOptions = {
-        includeScore: true,
-        threshold: 0.3,
-        ignoreLocation: true,
-        keys: [
-            { 
-                name: 'title',
-                weight: 0.5
-            },
-            { 
-                name: 'content',
-                weight: 1.0
-            },
-            { 
-                name: 'tags',
-                weight: 0.4
-            }
-        ],
-        shouldSort: true,
-        minMatchCharLength: 2,
-        findAllMatches: true,
-        location: 0,
-        distance: 10000
-    };
-
-    let fuse;
     let selectedIndex = -1;
 
     // Initialize Fuse.js when the page loads
-    document.addEventListener('DOMContentLoaded', () => {
-        fuse = new Fuse(searchData, fuseOptions);
-        
+    document.addEventListener('DOMContentLoaded', async () => {
         // Check for URL parameters
         const searchTerm = new URLSearchParams(window.location.search).get('q');
         if (searchTerm) {
@@ -95,14 +77,6 @@ title: Search
             searchInput.value = searchTerm;
             performSearch(searchTerm);
         }
-
-        // Global keyboard shortcut
-        document.addEventListener('keydown', (e) => {
-            if (e.key === '/' && document.activeElement !== searchInput) {
-                e.preventDefault();
-                searchInput.focus();
-            }
-        });
     });
 
     // Handle keyboard navigation
@@ -134,9 +108,19 @@ title: Search
         });
     }
 
-    // Handle search input
+    // Handle search input with debouncing
     document.getElementById('search-input').addEventListener('input', (e) => {
-        performSearch(e.target.value);
+        if (debounceTimeout) {
+            clearTimeout(debounceTimeout);
+        }
+        
+        debounceTimeout = setTimeout(async () => {
+            // Ensure search store is initialized
+            if (!searchStore) {
+                await initializeSearchStore();
+            }
+            performSearch(e.target.value);
+        }, DEBOUNCE_DELAY);
     });
 
     function highlightText(text, searchTerm) {
@@ -170,7 +154,59 @@ title: Search
         return text.toLowerCase().includes(searchTerm.toLowerCase());
     }
 
-    function performSearch(searchTerm) {
+    function createResultElement(item, searchTerm) {
+        const resultDiv = document.createElement('div');
+        resultDiv.className = 'search-result';
+
+        // Create and append title
+        const title = document.createElement('h2');
+        const titleLink = document.createElement('a');
+        titleLink.href = item.url;
+        titleLink.innerHTML = highlightText(item.title, searchTerm);
+        title.appendChild(titleLink);
+        resultDiv.appendChild(title);
+
+        // Create and append content snippet if exists
+        const contentSnippet = getContentSnippet(item.content, searchTerm);
+        if (contentSnippet && (hasExactMatch(item.title, searchTerm) || hasExactMatch(item.content, searchTerm) || hasExactMatch(item.tags, searchTerm))) {
+            const snippetDiv = document.createElement('div');
+            snippetDiv.className = 'search-snippet';
+            const snippetP = document.createElement('p');
+            snippetP.innerHTML = contentSnippet;
+            snippetDiv.appendChild(snippetP);
+            resultDiv.appendChild(snippetDiv);
+        }
+
+        // Create and append meta information
+        const metaDiv = document.createElement('div');
+        metaDiv.className = 'search-result-meta';
+
+        // Add date
+        const timeElement = document.createElement('time');
+        timeElement.textContent = item.date;
+        metaDiv.appendChild(timeElement);
+
+        // Add tags if they exist
+        if (item.tags) {
+            const tagsDiv = document.createElement('div');
+            tagsDiv.className = 'tags';
+            
+            item.tags.split(', ').forEach(tag => {
+                const tagLink = document.createElement('a');
+                tagLink.href = `${tagsBaseUrl}#${tag.toLowerCase()}`;
+                tagLink.className = 'tag';
+                tagLink.innerHTML = highlightText(tag, searchTerm);
+                tagsDiv.appendChild(tagLink);
+            });
+
+            metaDiv.appendChild(tagsDiv);
+        }
+
+        resultDiv.appendChild(metaDiv);
+        return resultDiv;
+    }
+
+    async function performSearch(searchTerm) {
         const searchResults = document.getElementById('search-results');
         selectedIndex = -1;
         
@@ -180,8 +216,12 @@ title: Search
         }
 
         try {
+            // Ensure search store is initialized
+            if (!searchStore) {
+                await initializeSearchStore();
+            }
+
             const results = fuse.search(searchTerm)
-                // Only keep results that have an exact match in title, content, or tags
                 .filter(result => {
                     const item = result.item;
                     return hasExactMatch(item.title, searchTerm) || 
@@ -189,56 +229,39 @@ title: Search
                            hasExactMatch(item.tags, searchTerm);
                 });
             
+            // Create document fragment for batch DOM updates
+            const fragment = document.createDocumentFragment();
+            
             if (results.length > 0) {
-                const resultList = results.map(result => {
-                    const item = result.item;
-                    const title = highlightText(item.title, searchTerm);
-                    const tags = item.tags ? item.tags.split(', ') : [];
-                    const contentSnippet = getContentSnippet(item.content, searchTerm);
-                    
-                    // Only show results with either a title match or content match
-                    if (!contentSnippet && !hasExactMatch(item.title, searchTerm) && !hasExactMatch(item.tags, searchTerm)) {
-                        return '';
-                    }
-                    
-                    return `
-                        <div class="search-result">
-                            <h2><a href="${item.url}">${title}</a></h2>
-                            ${contentSnippet ? `
-                                <div class="search-snippet">
-                                    <p>${contentSnippet}</p>
-                                </div>
-                            ` : ''}
-                            <div class="search-result-meta">
-                                <time>${item.date}</time>
-                                ${tags.length ? `
-                                    <div class="tags">
-                                        ${tags.map(tag => `
-                                            <a href="${tagsBaseUrl}#${tag.toLowerCase()}"
-                                               class="tag">${highlightText(tag, searchTerm)}</a>
-                                        `).join('')}
-                                    </div>
-                                ` : ''}
-                            </div>
-                        </div>
-                    `;
-                }).filter(html => html).join('');
+                // Create all result elements in memory first
+                results.forEach(result => {
+                    const resultElement = createResultElement(result.item, searchTerm);
+                    fragment.appendChild(resultElement);
+                });
                 
-                searchResults.innerHTML = resultList;
+                // Clear previous results and append new ones in a single operation
+                searchResults.textContent = '';
+                searchResults.appendChild(fragment);
             } else {
-                searchResults.innerHTML = `
-                    <div class="search-no-results">
-                        <p>No results found for "${searchTerm}"</p>
-                    </div>
-                `;
+                const noResultsDiv = document.createElement('div');
+                noResultsDiv.className = 'search-no-results';
+                const message = document.createElement('p');
+                message.textContent = `No results found for "${searchTerm}"`;
+                noResultsDiv.appendChild(message);
+                fragment.appendChild(noResultsDiv);
+                
+                searchResults.textContent = '';
+                searchResults.appendChild(fragment);
             }
         } catch (e) {
-            console.error('Search error:', e);
-            searchResults.innerHTML = `
-                <div class="search-no-results">
-                    <p>An error occurred while searching. Please try a different search term.</p>
-                </div>
-            `;
+            const errorDiv = document.createElement('div');
+            errorDiv.className = 'search-no-results';
+            const errorMessage = document.createElement('p');
+            errorMessage.textContent = 'An error occurred while searching. Please try a different search term.';
+            errorDiv.appendChild(errorMessage);
+            
+            searchResults.textContent = '';
+            searchResults.appendChild(errorDiv);
         }
     }
 </script>
