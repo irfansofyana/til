@@ -309,6 +309,7 @@ nav .container {
 
 .post-header {
     margin-bottom: 2rem;
+    position: relative;
 }
 
 .post-header h1 {
@@ -1961,4 +1962,46 @@ body:has(.home-wrapper) > .container > *:not(.home-wrapper) {
     margin-bottom: 1.5rem;
     letter-spacing: -0.02em;
     text-decoration: none;
+}
+
+/* Back button styles */
+.post-header {
+    position: relative;
+}
+
+.back-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin: 2rem 0 1rem;
+    padding: 0.5rem 0;
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: var(--text-muted);
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    outline: none;
+}
+
+.back-button::before {
+    content: "←";
+    font-size: 1.2em;
+    line-height: 1;
+    margin-right: 0.25rem;
+    transition: transform 0.2s ease;
+}
+
+.back-button:hover {
+    color: var(--primary-color);
+    transform: translateX(-2px);
+}
+
+.back-button:hover::before {
+    transform: translateX(-2px);
+}
+
+.back-button:focus {
+    outline: none;
 }
