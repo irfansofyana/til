@@ -29,10 +29,7 @@ layout: default
         </div>
     </div>
     
-    <aside class="post-outline">
-        <h3>Table of Contents</h3>
-        <ul class="outline-list" id="post-outline-list"></ul>
-    </aside>
+
 </article>
 
 <script>
@@ -80,11 +77,10 @@ document.addEventListener('DOMContentLoaded', function() {
         pre.parentNode.insertBefore(codeHeader, pre);
     });
     
-    // Generate post outline
+    // Add IDs to headings for direct linking
     const postContent = document.querySelector('.post-content');
-    const outlineList = document.getElementById('post-outline-list');
     
-    if (postContent && outlineList) {
+    if (postContent) {
         const headings = postContent.querySelectorAll('h2, h3, h4');
         
         if (headings.length > 0) {
@@ -93,52 +89,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (!heading.id) {
                     heading.id = `heading-${index}`;
                 }
-                
-                const headingLevel = heading.tagName.toLowerCase();
-                const listItem = document.createElement('li');
-                listItem.className = 'outline-item';
-                
-                const link = document.createElement('a');
-                link.href = `#${heading.id}`;
-                link.className = `outline-link outline-${headingLevel}`;
-                link.textContent = heading.textContent;
-                link.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    heading.scrollIntoView({ behavior: 'smooth' });
-                    history.pushState(null, null, `#${heading.id}`);
-                });
-                
-                listItem.appendChild(link);
-                outlineList.appendChild(listItem);
             });
-            
-            // Highlight active section on scroll
-            const outlineLinks = document.querySelectorAll('.outline-link');
-            const headingElements = Array.from(headings);
-            
-            window.addEventListener('scroll', () => {
-                const scrollPosition = window.scrollY;
-                
-                // Find the current heading
-                let currentHeadingIndex = -1;
-                headingElements.forEach((heading, index) => {
-                    const headingPosition = heading.getBoundingClientRect().top + window.scrollY;
-                    if (scrollPosition >= headingPosition - 100) {
-                        currentHeadingIndex = index;
-                    }
-                });
-                
-                // Update active class
-                outlineLinks.forEach((link, index) => {
-                    link.classList.toggle('active', index === currentHeadingIndex);
-                });
-            });
-            
-            // Trigger scroll event to highlight initial section
-            window.dispatchEvent(new Event('scroll'));
-        } else {
-            // Hide outline if no headings
-            document.querySelector('.post-outline').style.display = 'none';
         }
     }
 });
