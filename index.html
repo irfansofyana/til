@@ -241,6 +241,125 @@ title: Home
             }
         </script>
 
+        <!-- Code block enhancement script -->
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                // Handle code blocks for better mobile experience
+                const codeBlocks = document.querySelectorAll('pre, .highlight');
+                
+                codeBlocks.forEach(block => {
+                    // Add touch indicator for mobile
+                    if (window.innerWidth <= 768) {
+                        const indicator = document.createElement('div');
+                        indicator.className = 'code-scroll-indicator';
+                        indicator.innerHTML = '<span>Scroll to view code</span>';
+                        indicator.style.cssText = 'text-align: center; font-size: 0.7rem; color: var(--secondary-text); padding: 0.25rem 0; opacity: 0.8;';
+                        
+                        // Only show indicator if content overflows
+                        if (block.scrollWidth > block.clientWidth) {
+                            block.parentNode.insertBefore(indicator, block.nextSibling);
+                            
+                            // Hide indicator after user has scrolled
+                            block.addEventListener('scroll', function() {
+                                indicator.style.display = 'none';
+                            }, { once: true });
+                        }
+                    }
+                    
+                    // Add horizontal scroll indicator for touch devices
+                    if ('ontouchstart' in window && block.scrollWidth > block.clientWidth) {
+                        block.classList.add('has-horizontal-scroll');
+                        
+                        // Add subtle horizontal scroll indicator
+                        const scrollIndicator = document.createElement('div');
+                        scrollIndicator.className = 'horizontal-scroll-indicator';
+                        scrollIndicator.innerHTML = '<span>⟷</span>';
+                        scrollIndicator.style.cssText = 'position: absolute; right: 10px; bottom: 5px; background: rgba(0,0,0,0.1); border-radius: 10px; padding: 2px 8px; font-size: 12px; opacity: 0.7;';
+                        
+                        block.style.position = 'relative';
+                        block.appendChild(scrollIndicator);
+                        
+                        // Hide indicator after user has scrolled
+                        block.addEventListener('scroll', function() {
+                            scrollIndicator.style.opacity = '0';
+                            setTimeout(() => {
+                                scrollIndicator.remove();
+                            }, 300);
+                        }, { once: true });
+                    }
+                });
+                
+                // Add copy functionality to code blocks
+                const addCopyButtons = () => {
+                    document.querySelectorAll('pre:not(.copy-added)').forEach(block => {
+                        if (block.querySelector('code')) {
+                            // Create header
+                            const header = document.createElement('div');
+                            header.className = 'code-header';
+                            
+                            // Try to detect language
+                            const code = block.querySelector('code');
+                            let language = 'code';
+                            
+                            if (code.className) {
+                                const langMatch = code.className.match(/language-(\w+)/);
+                                if (langMatch) language = langMatch[1];
+                            }
+                            
+                            // Add language indicator
+                            const langIndicator = document.createElement('span');
+                            langIndicator.className = 'language-indicator';
+                            langIndicator.textContent = language;
+                            header.appendChild(langIndicator);
+                            
+                            // Add copy button
+                            const button = document.createElement('button');
+                            button.className = 'copy-code-button';
+                            button.textContent = 'Copy';
+                            
+                            button.addEventListener('click', () => {
+                                const codeText = code.textContent;
+                                navigator.clipboard.writeText(codeText).then(() => {
+                                    button.textContent = 'Copied!';
+                                    setTimeout(() => {
+                                        button.textContent = 'Copy';
+                                    }, 2000);
+                                }).catch(err => {
+                                    console.error('Failed to copy code: ', err);
+                                    button.textContent = 'Failed';
+                                    setTimeout(() => {
+                                        button.textContent = 'Copy';
+                                    }, 2000);
+                                });
+                            });
+                            
+                            header.appendChild(button);
+                            
+                            // Insert header before code block
+                            block.parentNode.insertBefore(header, block);
+                            
+                            // Mark as processed
+                            block.classList.add('copy-added');
+                        }
+                    });
+                };
+                
+                // Run initially and when content changes (like after search)
+                addCopyButtons();
+                
+                // Watch for DOM changes to add copy buttons to dynamically loaded content
+                const observer = new MutationObserver((mutations) => {
+                    mutations.forEach((mutation) => {
+                        if (mutation.addedNodes.length) {
+                            addCopyButtons();
+                        }
+                    });
+                });
+                
+                observer.observe(document.body, { childList: true, subtree: true });
+            });
+        </script>
+
         <section class="recent-posts">
             <div class="container">
                 <div class="recent-learnings">

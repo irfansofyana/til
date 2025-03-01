@@ -36,56 +36,13 @@ layout: default
 </article>
 
 <script>
-// Add line numbers to code blocks
+// Simplified code block processing
 document.addEventListener('DOMContentLoaded', function() {
-    // Process code blocks for line numbers
+    // Process code blocks
     document.querySelectorAll('pre code').forEach(function(codeBlock) {
         // Skip if already processed
-        if (codeBlock.querySelector('.line')) return;
+        if (codeBlock.parentElement.previousElementSibling && codeBlock.parentElement.previousElementSibling.classList.contains('code-header')) return;
         
-        // Get the code content
-        const code = codeBlock.innerHTML;
-        
-        // Split by line breaks and wrap each line in a span
-        const lines = code.split('\n');
-        
-        // Filter out empty lines at the end
-        let lastNonEmptyIndex = lines.length - 1;
-        while (lastNonEmptyIndex >= 0 && !lines[lastNonEmptyIndex].trim()) {
-            lastNonEmptyIndex--;
-        }
-        
-        const filteredLines = lines.slice(0, lastNonEmptyIndex + 1);
-        
-        // Create a table for better alignment
-        const table = document.createElement('table');
-        table.className = 'code-table';
-        
-        // Add each line as a table row
-        filteredLines.forEach((line, index) => {
-            const row = document.createElement('tr');
-            
-            // Line number cell
-            const lineNumberCell = document.createElement('td');
-            lineNumberCell.className = 'line-number';
-            lineNumberCell.textContent = index + 1;
-            lineNumberCell.setAttribute('data-line-number', index + 1);
-            
-            // Code content cell
-            const codeCell = document.createElement('td');
-            codeCell.className = 'line-content';
-            codeCell.innerHTML = line || ' '; // Use space for empty lines to maintain height
-            
-            row.appendChild(lineNumberCell);
-            row.appendChild(codeCell);
-            table.appendChild(row);
-        });
-        
-        // Replace the code content with the table
-        codeBlock.innerHTML = '';
-        codeBlock.appendChild(table);
-        
-        // Add copy button to code blocks
         const pre = codeBlock.parentElement;
         const language = codeBlock.className.match(/language-([^\s]*)/)?.[1] || '';
         
@@ -106,12 +63,10 @@ document.addEventListener('DOMContentLoaded', function() {
         copyButton.className = 'copy-code-button';
         copyButton.textContent = 'Copy';
         copyButton.addEventListener('click', function() {
-            // Extract code from the table structure
-            const codeLines = Array.from(codeBlock.querySelectorAll('.line-content'))
-                .map(line => line.textContent)
-                .join('\n');
+            // Get the code content directly
+            const codeText = codeBlock.textContent;
                 
-            navigator.clipboard.writeText(codeLines).then(() => {
+            navigator.clipboard.writeText(codeText).then(() => {
                 copyButton.textContent = 'Copied!';
                 setTimeout(() => {
                     copyButton.textContent = 'Copy';
@@ -123,14 +78,6 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Insert the header before the pre element
         pre.parentNode.insertBefore(codeHeader, pre);
-        
-        // Add language indicator if available
-        if (language) {
-            const languageIndicator = document.createElement('div');
-            languageIndicator.className = 'language-indicator';
-            languageIndicator.textContent = language;
-            pre.appendChild(languageIndicator);
-        }
     });
     
     // Generate post outline

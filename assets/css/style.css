@@ -71,6 +71,10 @@
     box-sizing: border-box;
 }
 
+html {
+    width: 100%;
+}
+
 body {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
     line-height: 1.7;
@@ -105,6 +109,7 @@ header {
     position: relative;
     z-index: 10;
     box-shadow: none;
+    width: 100%;
 }
 
 nav .container {
@@ -112,6 +117,7 @@ nav .container {
     justify-content: space-between;
     align-items: center;
     position: relative;
+    width: 100%;
 }
 
 .nav-content {
@@ -362,6 +368,7 @@ nav .container {
     margin: 0 auto;
     padding: 0 1.5rem;
     width: 100%;
+    box-sizing: border-box;
 }
 
 /* Posts */
@@ -382,6 +389,8 @@ nav .container {
     margin-bottom: 2rem;
     position: relative;
     padding: 0.5rem 1rem;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .post-header h1 {
@@ -1223,6 +1232,7 @@ nav a:hover, .nav-link:hover {
     box-shadow: var(--card-shadow);
     border: 1px solid var(--border-color);
     width: 100%;
+    box-sizing: border-box;
 }
 
 .posts-list {
@@ -1408,6 +1418,8 @@ nav a:hover, .nav-link:hover {
         margin: 1.5rem 0 2rem;
         padding: 1rem;
         border-radius: 8px;
+        width: 100%;
+        box-sizing: border-box;
     }
 
     .posts-list {
@@ -1432,6 +1444,7 @@ nav a:hover, .nav-link:hover {
     position: relative;
     z-index: 10;
     width: 100%;
+    box-sizing: border-box;
 }
 
 .home-search-container {
@@ -1487,6 +1500,8 @@ nav a:hover, .nav-link:hover {
     max-height: 350px;
     overflow-y: auto;
     transition: all 0.3s ease;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .home-search-result {
@@ -1557,14 +1572,29 @@ nav a:hover, .nav-link:hover {
 }
 
 @media (max-width: 768px) {
+    .home-wrapper {
+        width: 100%;
+        padding: 0;
+    }
+    
+    .home-content {
+        width: 100%;
+        padding: 0.5rem 1rem 2rem;
+        box-sizing: border-box;
+    }
+    
     .home-search-section {
         padding: 1rem;
         margin: -0.75rem auto 2rem;
+        width: 100%;
+        box-sizing: border-box;
     }
     
     .home-search-input {
         padding: 0.75rem 1rem;
         font-size: 0.95rem;
+        width: 100%;
+        box-sizing: border-box;
     }
     
     .home-search-result {
@@ -1743,92 +1773,73 @@ nav a:hover, .nav-link:hover {
     border-radius: 10px;
 }
 
-/* Code block styles */
+/* Code block styles - Enhanced for better responsive design */
 pre {
-    overflow: auto;
-    white-space: pre;
-    word-wrap: normal;
+    overflow-x: auto;
     background-color: var(--code-bg);
-    border-radius: 8px;
-    margin: 2rem 0;
-    max-height: 600px; /* Increased height for more content visibility */
+    border-radius: 6px;
+    margin: 1.5rem 0;
     border: 1px solid var(--border-color);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
     position: relative;
     width: 100%;
+    box-sizing: border-box;
+    padding: 1rem;
+    max-width: 100%;
+    -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+    /* Ensure code block doesn't exceed container width */
+    max-width: calc(100vw - 3rem);
+    margin-left: auto;
+    margin-right: auto;
 }
 
 pre code {
     display: block;
-    min-width: 100%;
-    padding: 0;
     background: none;
-    counter-reset: line;
     font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace;
     line-height: 1.5;
-    font-size: 0.85rem; /* Smaller text size for code */
-}
-
-/* Line numbers for code blocks */
-pre code {
-    tab-size: 4;
-}
-
-.code-table {
-    width: 100%;
-    border-spacing: 0;
-    border-collapse: collapse;
-}
-
-.line-number {
-    color: var(--accent-color); /* Using accent color for better visibility */
-    opacity: 0.8;
-    text-align: right;
-    padding: 0 1em;
-    user-select: none;
-    border-right: 1px solid var(--border-color);
-    min-width: 3.5em;
-    width: 3.5em;
-    background-color: rgba(0, 0, 0, 0.05);
-    vertical-align: top;
-    position: sticky;
-    left: 0;
-    font-size: 0.8em;
-    font-weight: 500; /* Slightly bolder for better visibility */
-}
-
-.line-content {
-    padding: 0 1.5em 0 1em;
-    white-space: pre;
-    vertical-align: top;
-    line-height: 1.5;
-}
-
-/* Ensure code blocks with tables maintain proper scrolling */
-pre {
-    padding: 0;
-}
-
-pre code {
-    padding: 1rem 0;
-}
-
-/* Add hover effect to code lines */
-.code-table tr:hover {
-    background-color: rgba(0, 0, 0, 0.05);
-}
-
-/* Add alternating row colors for better readability */
-.code-table tr:nth-child(even) .line-content {
-    background-color: rgba(0, 0, 0, 0.02);
-}
-
-/* Ensure the code table fills the container */
-.code-table {
-    width: 100%;
-    border-spacing: 0;
-    border-collapse: collapse;
     font-size: 0.85rem;
+    tab-size: 4;
+    white-space: pre;
+    word-wrap: normal; /* Prevent wrapping of code */
+}
+
+/* Code header with language and copy button */
+.code-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 0.75rem;
+    background-color: rgba(0, 0, 0, 0.05);
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
+    border-bottom: 1px solid var(--border-color);
+    font-size: 0.8rem;
+    margin-top: 1.5rem;
+    position: sticky;
+    top: 0;
+    z-index: 5;
+    width: 100%;
+}
+
+.copy-code-button {
+    background-color: transparent;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    padding: 0.25rem 0.5rem;
+    font-size: 0.75rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.copy-code-button:hover {
+    background-color: var(--accent-color);
+    color: white;
+}
+
+.language-indicator {
+    font-size: 0.75rem;
+    color: var(--secondary-text);
+    font-weight: 500;
 }
 
 code {
@@ -1837,6 +1848,8 @@ code {
     padding: 0.2em 0.4em;
     background-color: var(--code-bg);
     border-radius: 3px;
+    word-break: break-word;
+    overflow-wrap: break-word;
 }
 
 .highlight {
@@ -1844,6 +1857,44 @@ code {
     overflow-x: auto;
     background-color: var(--code-bg);
     border-radius: 8px;
+    max-width: 100%;
+    margin: 1.5rem 0;
+    border: 1px solid var(--border-color);
+    -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+    /* Ensure highlight doesn't exceed container width */
+    max-width: calc(100vw - 3rem);
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Code block with horizontal scroll */
+.has-horizontal-scroll {
+    position: relative;
+}
+
+.horizontal-scroll-indicator {
+    position: absolute;
+    right: 10px;
+    bottom: 5px;
+    background: rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    padding: 2px 8px;
+    font-size: 12px;
+    opacity: 0.7;
+    transition: opacity 0.3s ease;
+    color: var(--text-color);
+    z-index: 5;
+}
+
+/* Code scroll indicator */
+.code-scroll-indicator {
+    text-align: center;
+    font-size: 0.7rem;
+    color: var(--secondary-text);
+    padding: 0.25rem 0;
+    opacity: 0.8;
+    margin-top: -0.5rem;
+    margin-bottom: 1rem;
 }
 
 /* Copy code button */
@@ -1859,6 +1910,8 @@ code {
     position: sticky;
     top: 0;
     z-index: 5;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .copy-code-button {
@@ -1872,6 +1925,8 @@ code {
     transition: all 0.2s ease;
     font-weight: 500;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    white-space: nowrap;
+    margin-left: 0.5rem;
 }
 
 .copy-code-button:hover {
@@ -1894,10 +1949,49 @@ code {
     opacity: 0.8;
     margin-right: auto;
     font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 50%;
 }
 
 /* Improved responsive styles */
 @media (max-width: 768px) {
+    pre, .highlight {
+        max-width: calc(100vw - 2.5rem);
+        overflow-x: auto;
+        font-size: 0.8rem;
+        padding: 0.75rem;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    
+    pre code {
+        font-size: 0.8rem;
+    }
+    
+    .code-header {
+        padding: 0.4rem 0.75rem;
+        flex-wrap: wrap;
+    }
+    
+    .language-indicator {
+        font-size: 0.7rem;
+        padding: 0.2rem 0.4rem;
+        margin-bottom: 0.25rem;
+    }
+    
+    .copy-code-button {
+        font-size: 0.7rem;
+        padding: 0.2rem 0.5rem;
+    }
+    
+    .code-table {
+        display: table;
+        table-layout: auto;
+        width: max-content !important;
+        max-width: none !important;
+    }
     .container {
         padding: 0 1.25rem;
     }
@@ -2105,17 +2199,116 @@ code {
     }
 
     .post-content pre {
-        padding: 0.75rem;
+        padding: 0.5rem;
         margin: 1rem 0;
-        font-size: 0.85rem;
+        font-size: 0.75rem;
         overflow-x: auto;
         -webkit-overflow-scrolling: touch;
+        max-width: calc(100vw - 1.5rem);
+        box-sizing: border-box;
+        width: auto;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    
+    .post-content pre code {
+        font-size: 0.75rem;
+    }
+    
+    .code-header {
+        padding: 0.3rem 0.5rem;
+    }
+    
+    .language-indicator {
+        font-size: 0.65rem;
+        padding: 0.15rem 0.3rem;
+        max-width: 40%;
+    }
+    
+    .copy-code-button {
+        font-size: 0.65rem;
+        padding: 0.15rem 0.4rem;
+    }
+    
+    code {
+        font-size: 0.8em;
+        padding: 0.15em 0.3em;
+    }
+    
+    .post-content .code-table {
+        font-size: 0.8rem;
+    }
+    
+    .post-content .line-number {
+        min-width: 2.5em;
+        width: 2.5em;
+        padding: 0 0.5em;
+    }
+    
+    .post-content .line-content {
+        padding: 0 0.5em 0 0.5em;
     }
 }
 
 @media (max-width: 480px) {
     .container {
         padding: 0 0.75rem;
+    }
+    
+    pre {
+        margin: 1.5rem 0;
+        overflow-x: auto;
+        font-size: 0.75rem;
+        border-radius: 6px;
+        max-width: 100%;
+    }
+    
+    .code-table {
+        width: max-content !important;
+        max-width: none !important;
+        display: table;
+        table-layout: auto;
+    }
+    
+    .highlight {
+        max-width: 100%;
+        overflow-x: auto;
+        width: 100%;
+    }
+    
+    pre code {
+        font-size: 0.75rem;
+        padding: 0.75rem 0;
+    }
+    
+    .code-table {
+        font-size: 0.75rem;
+    }
+    
+    .line-number {
+        min-width: 2em;
+        width: 2em;
+        padding: 0 0.4em;
+        font-size: 0.7em;
+    }
+    
+    .line-content {
+        padding: 0 0.4em 0 0.4em;
+    }
+    
+    .code-header {
+        padding: 0.4rem 0.75rem;
+        font-size: 0.75rem;
+    }
+    
+    .copy-code-button {
+        padding: 0.3rem 0.6rem;
+        font-size: 0.7rem;
+    }
+    
+    .language-indicator {
+        font-size: 0.65rem;
+        padding: 0.2rem 0.4rem;
     }
 
     .nav-content {
@@ -2447,6 +2640,17 @@ body:has(.home-wrapper) > .container > *:not(.home-wrapper) {
 }
 
 @media (max-width: 480px) {
+    .home-wrapper {
+        width: 100%;
+        padding: 0;
+    }
+    
+    .home-content {
+        width: 100%;
+        padding: 0.5rem 0.75rem 1.5rem;
+        box-sizing: border-box;
+    }
+    
     .hero-section {
         padding: 2rem 0 1.5rem;
         margin-top: 0;
@@ -2467,20 +2671,52 @@ body:has(.home-wrapper) > .container > *:not(.home-wrapper) {
     
     .home-search-section {
         margin-top: -0.5rem;
-        padding: 1rem;
+        padding: 0.75rem;
+        width: 100%;
+        box-sizing: border-box;
     }
     
     .home-search-input {
-        padding: 0.875rem 1.25rem;
+        padding: 0.875rem 1rem;
         font-size: 0.95rem;
+        width: 100%;
+        box-sizing: border-box;
+    }
+    
+    .home-search-results {
+        width: 100%;
+        left: 0;
+        right: 0;
+        box-sizing: border-box;
+    }
+    
+    .home-search-result {
+        padding: 0.5rem 0.75rem;
+    }
+    
+    .home-search-result h3 {
+        font-size: 0.85rem;
+    }
+    
+    .home-search-result-meta {
+        flex-wrap: wrap;
+        gap: 0.4rem;
+        font-size: 0.7rem;
     }
 }
 
 /* Home content styles */
+.home-wrapper {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden;
+}
+
 .home-content {
     max-width: 800px;
     margin: 0 auto;
     padding: 0.5rem 0 2rem;
+    width: 100%;
 }
 
 .section-title {
