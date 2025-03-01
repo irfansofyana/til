@@ -4,6 +4,11 @@ title: Tags
 ---
 
 <button onclick="window.history.back()" class="back-button">Back</button>
+<button id="scroll-top-button" class="scroll-top-button" title="Scroll to top">
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="18 15 12 9 6 15"></polyline>
+    </svg>
+</button>
 <div class="tags-container">
     <div class="content-list">
         <div class="all-items-list">
@@ -27,6 +32,9 @@ title: Tags
                         <li>
                             <a href="{{ post.url | relative_url }}">{{ post.title }}</a>
                             <span class="post-date">({{ post.date | date: "%B %-d, %Y" }})</span>
+                            {% if post.description %}
+                            <div class="post-description-hint">{{ post.description }}</div>
+                            {% endif %}
                         </li>
                     {% endfor %}
                     </ul>
@@ -46,5 +54,25 @@ title: Tags
                 element.scrollIntoView();
             }
         }
+        
+        // Scroll to top button functionality
+        const scrollTopButton = document.getElementById('scroll-top-button');
+        
+        // Show/hide button based on scroll position
+        window.addEventListener('scroll', function() {
+            if (window.pageYOffset > 300) {
+                scrollTopButton.classList.add('visible');
+            } else {
+                scrollTopButton.classList.remove('visible');
+            }
+        });
+        
+        // Scroll to top when button is clicked
+        scrollTopButton.addEventListener('click', function() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
     });
 </script>
