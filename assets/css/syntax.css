@@ -1,74 +1,162 @@
 /* Simplified syntax highlighting */
+/* Light theme syntax highlighting */
+:root[data-theme="light"] .highlight, :root[data-theme="light"] .highlight .w,
 .highlight, .highlight .w {
   color: #24292e;
   background-color: transparent;
 }
+:root[data-theme="light"] .highlight .k, :root[data-theme="light"] .highlight .kd, :root[data-theme="light"] .highlight .kn, :root[data-theme="light"] .highlight .kp, :root[data-theme="light"] .highlight .kr, :root[data-theme="light"] .highlight .kt, :root[data-theme="light"] .highlight .kv,
 .highlight .k, .highlight .kd, .highlight .kn, .highlight .kp, .highlight .kr, .highlight .kt, .highlight .kv {
   color: #d73a49;
 }
+:root[data-theme="light"] .highlight .gr,
 .highlight .gr {
   color: #b31d28;
   background-color: #ffeef0;
 }
+:root[data-theme="light"] .highlight .gd,
 .highlight .gd {
   color: #b31d28;
   background-color: #ffeef0;
 }
+:root[data-theme="light"] .highlight .nb,
 .highlight .nb {
   color: #005cc5;
 }
+:root[data-theme="light"] .highlight .nc,
 .highlight .nc {
   color: #6f42c1;
 }
+:root[data-theme="light"] .highlight .no,
 .highlight .no {
   color: #005cc5;
 }
+:root[data-theme="light"] .highlight .nn,
 .highlight .nn {
   color: #6f42c1;
 }
+:root[data-theme="light"] .highlight .nt,
 .highlight .nt {
   color: #22863a;
 }
+:root[data-theme="light"] .highlight .nv, :root[data-theme="light"] .highlight .vm,
 .highlight .nv, .highlight .vm {
   color: #24292e;
 }
+:root[data-theme="light"] .highlight .s, :root[data-theme="light"] .highlight .sa, :root[data-theme="light"] .highlight .sb, :root[data-theme="light"] .highlight .sc, :root[data-theme="light"] .highlight .dl, :root[data-theme="light"] .highlight .sd, :root[data-theme="light"] .highlight .s2, :root[data-theme="light"] .highlight .sh, :root[data-theme="light"] .highlight .sx, :root[data-theme="light"] .highlight .s1,
 .highlight .s, .highlight .sa, .highlight .sb, .highlight .sc, .highlight .dl, .highlight .sd, .highlight .s2, .highlight .sh, .highlight .sx, .highlight .s1 {
   color: #032f62;
 }
+:root[data-theme="light"] .highlight .sr,
 .highlight .sr {
   color: #032f62;
 }
+:root[data-theme="light"] .highlight .si,
 .highlight .si {
   color: #005cc5;
 }
+:root[data-theme="light"] .highlight .se,
 .highlight .se {
   color: #032f62;
 }
-.highlight .nn {
-  color: #6f42c1;
-}
+:root[data-theme="light"] .highlight .nl,
 .highlight .nl {
   color: #005cc5;
 }
+:root[data-theme="light"] .highlight .ni,
 .highlight .ni {
   color: #005cc5;
 }
+:root[data-theme="light"] .highlight .bp,
 .highlight .bp {
   color: #005cc5;
 }
+:root[data-theme="light"] .highlight .c, :root[data-theme="light"] .highlight .ch, :root[data-theme="light"] .highlight .cd, :root[data-theme="light"] .highlight .cm, :root[data-theme="light"] .highlight .cpf, :root[data-theme="light"] .highlight .c1, :root[data-theme="light"] .highlight .cs,
 .highlight .c, .highlight .ch, .highlight .cd, .highlight .cm, .highlight .cpf, .highlight .c1, .highlight .cs {
   color: #6a737d;
 }
+:root[data-theme="light"] .highlight .cp,
 .highlight .cp {
   color: #959da5;
 }
+:root[data-theme="light"] .highlight .m, :root[data-theme="light"] .highlight .mb, :root[data-theme="light"] .highlight .mf, :root[data-theme="light"] .highlight .mh, :root[data-theme="light"] .highlight .mi, :root[data-theme="light"] .highlight .il, :root[data-theme="light"] .highlight .mo, :root[data-theme="light"] .highlight .mx,
 .highlight .m, .highlight .mb, .highlight .mf, .highlight .mh, .highlight .mi, .highlight .il, .highlight .mo, .highlight .mx {
   color: #005cc5;
 }
+:root[data-theme="light"] .highlight .vi,
 .highlight .vi {
   color: #24292e;
 }
+:root[data-theme="light"] .highlight,
 .highlight {
   margin: 0;
   padding: 0;
+}
+
+/* Dark theme syntax highlighting with improved contrast */
+:root[data-theme="dark"] .highlight, :root[data-theme="dark"] .highlight .w {
+  color: #e6e6e6;
+  background-color: transparent;
+}
+:root[data-theme="dark"] .highlight .k, :root[data-theme="dark"] .highlight .kd, :root[data-theme="dark"] .highlight .kn, :root[data-theme="dark"] .highlight .kp, :root[data-theme="dark"] .highlight .kr, :root[data-theme="dark"] .highlight .kt, :root[data-theme="dark"] .highlight .kv {
+  color: #ff7b72;
+}
+:root[data-theme="dark"] .highlight .gr {
+  color: #ffa198;
+  background-color: rgba(255, 129, 130, 0.15);
+}
+:root[data-theme="dark"] .highlight .gd {
+  color: #ffa198;
+  background-color: rgba(255, 129, 130, 0.15);
+}
+:root[data-theme="dark"] .highlight .nb {
+  color: #79c0ff;
+}
+:root[data-theme="dark"] .highlight .nc {
+  color: #c9abff;
+}
+:root[data-theme="dark"] .highlight .no {
+  color: #79c0ff;
+}
+:root[data-theme="dark"] .highlight .nn {
+  color: #c9abff;
+}
+:root[data-theme="dark"] .highlight .nt {
+  color: #7ee787;
+}
+:root[data-theme="dark"] .highlight .nv, :root[data-theme="dark"] .highlight .vm {
+  color: #e6e6e6;
+}
+:root[data-theme="dark"] .highlight .s, :root[data-theme="dark"] .highlight .sa, :root[data-theme="dark"] .highlight .sb, :root[data-theme="dark"] .highlight .sc, :root[data-theme="dark"] .highlight .dl, :root[data-theme="dark"] .highlight .sd, :root[data-theme="dark"] .highlight .s2, :root[data-theme="dark"] .highlight .sh, :root[data-theme="dark"] .highlight .sx, :root[data-theme="dark"] .highlight .s1 {
+  color: #a5d6ff;
+}
+:root[data-theme="dark"] .highlight .sr {
+  color: #a5d6ff;
+}
+:root[data-theme="dark"] .highlight .si {
+  color: #79c0ff;
+}
+:root[data-theme="dark"] .highlight .se {
+  color: #a5d6ff;
+}
+:root[data-theme="dark"] .highlight .nl {
+  color: #79c0ff;
+}
+:root[data-theme="dark"] .highlight .ni {
+  color: #79c0ff;
+}
+:root[data-theme="dark"] .highlight .bp {
+  color: #79c0ff;
+}
+:root[data-theme="dark"] .highlight .c, :root[data-theme="dark"] .highlight .ch, :root[data-theme="dark"] .highlight .cd, :root[data-theme="dark"] .highlight .cm, :root[data-theme="dark"] .highlight .cpf, :root[data-theme="dark"] .highlight .c1, :root[data-theme="dark"] .highlight .cs {
+  color: #8b949e;
+}
+:root[data-theme="dark"] .highlight .cp {
+  color: #8b949e;
+}
+:root[data-theme="dark"] .highlight .m, :root[data-theme="dark"] .highlight .mb, :root[data-theme="dark"] .highlight .mf, :root[data-theme="dark"] .highlight .mh, :root[data-theme="dark"] .highlight .mi, :root[data-theme="dark"] .highlight .il, :root[data-theme="dark"] .highlight .mo, :root[data-theme="dark"] .highlight .mx {
+  color: #79c0ff;
+}
+:root[data-theme="dark"] .highlight .vi {
+  color: #e6e6e6;
 }
