@@ -2,28 +2,95 @@
 layout: default
 ---
 <article class="post">
-    <header class="post-header">
-        <button onclick="window.history.back()" class="back-button">Back</button>
-        <h1>{{ page.title }}</h1>
-        {% if page.description %}
-        <p class="post-description">{{ page.description }}</p>
-        {% endif %}
-        <div class="post-meta">
-            <span class="date-category">
-                <time datetime="{{ page.date | date_to_xmlschema }}">{{ page.date | date: "%B %-d, %Y" }}</time>
-                {% if page.category %} • <a href="{{ '/categories' | relative_url }}#{{ page.category | slugify }}" class="category-link">{{ page.category }}</a>{% endif %}
-            </span>
-        </div>
-        {% if page.tags.size > 0 %}
-        <div class="tags">
-            {% for tag in page.tags %}
-            <a href="{{ '/tags' | relative_url }}#{{ tag | slugify }}" class="tag">{{ tag }}</a>
-            {% endfor %}
-        </div>
-        {% endif %}
-    </header>
+    <div class="post-container">
+        <header class="post-header">
+            <div class="post-header-top">
+                <button onclick="window.history.back()" class="back-button">Back</button>
+            </div>
+            <h1 class="post-title">{{ page.title }}</h1>
+            {% if page.description %}
+            <p class="post-description">{{ page.description }}</p>
+            {% endif %}
+            <div class="post-meta">
+                <span class="date-category">
+                    <time datetime="{{ page.date | date_to_xmlschema }}">{{ page.date | date: "%B %-d, %Y" }}</time>
+                    {% if page.category %} • <a href="{{ '/categories' | relative_url }}#{{ page.category | slugify }}" class="category-link">{{ page.category }}</a>{% endif %}
+                </span>
+            </div>
+            {% if page.tags.size > 0 %}
+            <div class="tags post-tags">
+                {% for tag in page.tags %}
+                <a href="{{ '/tags' | relative_url }}#{{ tag | slugify }}" class="tag">#{{ tag }}</a>
+                {% endfor %}
+            </div>
+            {% endif %}
+        </header>
 
-    <div class="post-content">
-        {{ content }}
+        <div class="post-content">
+            {{ content }}
+        </div>
     </div>
 </article>
+
+<script>
+// Simplified code block processing
+document.addEventListener('DOMContentLoaded', function() {
+    // Process code blocks
+    document.querySelectorAll('pre code').forEach(function(codeBlock) {
+        // Skip if already processed
+        if (codeBlock.parentElement.previousElementSibling && codeBlock.parentElement.previousElementSibling.classList.contains('code-header')) return;
+        
+        const pre = codeBlock.parentElement;
+        const language = codeBlock.className.match(/language-([^\s]*)/)?.[1] || '';
+        
+        // Create code header
+        const codeHeader = document.createElement('div');
+        codeHeader.className = 'code-header';
+        
+        // Add language indicator if available
+        if (language) {
+            const languageIndicator = document.createElement('span');
+            languageIndicator.className = 'language-indicator';
+            languageIndicator.textContent = language;
+            codeHeader.appendChild(languageIndicator);
+        }
+        
+        // Create copy button
+        const copyButton = document.createElement('button');
+        copyButton.className = 'copy-code-button';
+        copyButton.textContent = 'Copy';
+        copyButton.addEventListener('click', function() {
+            // Get the code content directly
+            const codeText = codeBlock.textContent;
+                
+            navigator.clipboard.writeText(codeText).then(() => {
+                copyButton.textContent = 'Copied!';
+                setTimeout(() => {
+                    copyButton.textContent = 'Copy';
+                }, 2000);
+            });
+        });
+        
+        codeHeader.appendChild(copyButton);
+        
+        // Insert the header before the pre element
+        pre.parentNode.insertBefore(codeHeader, pre);
+    });
+    
+    // Add IDs to headings for direct linking
+    const postContent = document.querySelector('.post-content');
+    
+    if (postContent) {
+        const headings = postContent.querySelectorAll('h2, h3, h4');
+        
+        if (headings.length > 0) {
+            headings.forEach((heading, index) => {
+                // Add ID to heading if it doesn't have one
+                if (!heading.id) {
+                    heading.id = `heading-${index}`;
+                }
+            });
+        }
+    }
+});
+</script>
