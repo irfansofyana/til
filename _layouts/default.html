@@ -17,10 +17,8 @@
             <nav>
                 <div class="container">
                     <div class="nav-content">
-                        <div class="site-title-container">
-                            <a href="{{ '/' | relative_url }}" class="site-title">{{ site.site_name }}</a>
-                            <p class="site-subtitle">A collection of concise write-ups on small things I learn day to day</p>
-                        </div>
+                        <a href="{{ '/' | relative_url }}" class="site-title">{{ site.site_name }}</a>
+                        <p class="site-subtitle">A collection of concise write-ups on small things I learn day to day</p>
                         <div class="nav-links">
                             <a href="{{ '/' | relative_url }}" class="nav-link {% if page.url == '/' %}active{% endif %}">
                                 <svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -42,7 +40,6 @@
                                 </svg>
                                 Categories
                             </a>
-
                         </div>
                     </div>
                 </div>
