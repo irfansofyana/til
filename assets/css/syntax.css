@@ -109,6 +109,32 @@
   color: #ffa198;
   background-color: rgba(255, 129, 130, 0.15);
 }
+
+/* Ensure code blocks display properly */
+.highlight pre {
+  max-width: 100%;
+  overflow-x: auto;
+  display: block;
+  white-space: pre;
+  word-wrap: normal;
+  position: relative;
+}
+
+.highlight code {
+  display: block;
+  width: max-content; /* Allow content to expand to its natural width */
+  min-width: 100%;
+  white-space: pre;
+}
+
+/* Fix for dark theme */
+:root[data-theme="dark"] .highlight pre {
+  background-color: var(--code-bg, #1a1a1a);
+}
+
+:root[data-theme="dark"] .highlight code {
+  color: #e6edf3;
+}
 :root[data-theme="dark"] .highlight .nb {
   color: #79c0ff;
 }

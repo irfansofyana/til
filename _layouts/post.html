@@ -33,7 +33,7 @@ layout: default
 </article>
 
 <script>
-// Simplified code block processing
+// Enhanced code block processing for better responsiveness
 document.addEventListener('DOMContentLoaded', function() {
     // Process code blocks
     document.querySelectorAll('pre code').forEach(function(codeBlock) {
@@ -75,6 +75,61 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Insert the header before the pre element
         pre.parentNode.insertBefore(codeHeader, pre);
+        
+        // Add a wrapper div with proper width constraints
+        if (!pre.parentNode.classList.contains('code-block-wrapper')) {
+            const wrapper = document.createElement('div');
+            wrapper.className = 'code-block-wrapper';
+            pre.parentNode.insertBefore(wrapper, pre);
+            wrapper.appendChild(pre);
+        }
+        
+        // Special handling for code block to ensure horizontal scrolling works correctly
+        pre.style.maxWidth = '100%';
+        pre.style.boxSizing = 'border-box';
+        pre.style.overflowX = 'auto';
+        
+        // Ensure code element can expand to its natural width while being scrollable
+        codeBlock.style.display = 'block';
+        codeBlock.style.minWidth = '100%';
+        codeBlock.style.width = 'max-content';
+        codeBlock.style.boxSizing = 'border-box';
+        
+        // Add line numbers if they don't exist yet
+        if (!pre.classList.contains('line-numbers-added')) {
+            // Get code content and split into lines
+            const codeContent = codeBlock.textContent;
+            const codeLines = codeContent.split('\n');
+            
+            // Clear existing code and replace with table layout
+            codeBlock.textContent = '';
+            codeBlock.style.display = 'block';
+            codeBlock.style.width = '100%';
+            
+            // Add each line with line number
+            codeLines.forEach((line, index) => {
+                // Line row
+                const lineRow = document.createElement('div');
+                lineRow.className = 'code-line-row';
+                
+                // Line number
+                const lineNumber = document.createElement('span');
+                lineNumber.className = 'line-number';
+                lineNumber.textContent = index + 1;
+                
+                // Line content
+                const lineContent = document.createElement('span');
+                lineContent.className = 'line-content';
+                lineContent.textContent = line;
+                
+                // Add to row and then to table
+                lineRow.appendChild(lineNumber);
+                lineRow.appendChild(lineContent);
+                codeBlock.appendChild(lineRow);
+            });
+            
+            pre.classList.add('line-numbers-added');
+        }
     });
     
     // Add IDs to headings for direct linking
@@ -91,6 +146,102 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             });
         }
+    }
+    
+    // Fix potential overflow issues by checking pre widths
+    function checkCodeBlockOverflow() {
+        document.querySelectorAll('pre').forEach(pre => {
+            // Reset any previous styles that might be causing issues
+            pre.style.width = '100%';
+            pre.style.maxWidth = '100%';
+            pre.style.overflowX = 'auto';
+            
+            // Make sure the wrapper is properly scrollable
+            const wrapper = pre.closest('.code-block-wrapper');
+            if (wrapper) {
+                wrapper.style.overflowX = 'auto';
+                wrapper.style.maxWidth = '100%';
+            }
+            
+            // Ensure code content can expand properly
+            const codeBlock = pre.querySelector('code');
+            if (codeBlock) {
+                codeBlock.style.width = 'max-content';
+                codeBlock.style.minWidth = '100%';
+            }
+            
+            // Make sure line-content elements can expand properly
+            pre.querySelectorAll('.line-content').forEach(lineContent => {
+                lineContent.style.width = 'max-content';
+                lineContent.style.minWidth = 'max-content';
+                lineContent.style.flex = '0 0 auto';
+            });
+            
+            // Make sure code-line-row elements can expand properly
+            pre.querySelectorAll('.code-line-row').forEach(lineRow => {
+                lineRow.style.width = 'max-content';
+                lineRow.style.minWidth = '100%';
+            });
+            
+            // If content is wider than container, show scroll indicator
+            const containerWidth = pre.parentElement.clientWidth;
+            const contentWidth = pre.scrollWidth;
+            
+            if (contentWidth > containerWidth) {
+                // Add class to indicate scrollable content
+                pre.classList.add('has-horizontal-scroll');
+                
+                // Add a scroll indicator if not already present
+                if (!pre.querySelector('.horizontal-scroll-indicator')) {
+                    const scrollIndicator = document.createElement('div');
+                    scrollIndicator.className = 'horizontal-scroll-indicator';
+                    scrollIndicator.textContent = 'scroll →';
+                    
+                    pre.appendChild(scrollIndicator);
+                    
+                    // Hide the indicator after scrolling
+                    pre.addEventListener('scroll', function() {
+                        scrollIndicator.style.opacity = '0';
+                        
+                        // Show again if returned to start
+                        if (pre.scrollLeft === 0) {
+                            scrollIndicator.style.opacity = '0.7';
+                        }
+                    });
+                }
+            } else {
+                pre.classList.remove('has-horizontal-scroll');
+                
+                // Remove scroll indicator if exists
+                const indicator = pre.querySelector('.horizontal-scroll-indicator');
+                if (indicator) {
+                    indicator.remove();
+                }
+            }
+        });
+    }
+    
+    // Run on load and resize
+    checkCodeBlockOverflow();
+    window.addEventListener('resize', checkCodeBlockOverflow);
+    
+    // Fix any text that might be overflowing
+    document.querySelectorAll('.post-content p, .post-content li, .post-content h1, .post-content h2, .post-content h3, .post-content h4, .post-content h5, .post-content h6').forEach(element => {
+        element.style.overflowWrap = 'break-word';
+        element.style.wordWrap = 'break-word';
+        element.style.wordBreak = 'break-word';
+        element.style.maxWidth = '100%';
+    });
+    
+    // Make sure the post content container is properly set
+    const postContent = document.querySelector('.post-content');
+    if (postContent) {
+        postContent.style.width = '100%';
+        postContent.style.maxWidth = '100%';
+        postContent.style.overflowX = 'hidden'; // Hide overflow at container level
+        postContent.style.overflowWrap = 'break-word';
+        postContent.style.wordWrap = 'break-word';
+        postContent.style.wordBreak = 'break-word';
     }
 });
 </script>
