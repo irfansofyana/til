@@ -4,8 +4,10 @@ layout: default
 <article class="post">
     <div>
         <header class="post-header">
-            <button onclick="window.history.back()" class="back-button">Back</button>
-            <h1>{{ page.title }}</h1>
+            <div class="post-header-top">
+                <button onclick="window.history.back()" class="back-button">Back</button>
+            </div>
+            <h1 class="post-title">{{ page.title }}</h1>
             {% if page.description %}
             <p class="post-description">{{ page.description }}</p>
             {% endif %}
@@ -16,7 +18,7 @@ layout: default
                 </span>
             </div>
             {% if page.tags.size > 0 %}
-            <div class="tags">
+            <div class="tags post-tags">
                 {% for tag in page.tags %}
                 <a href="{{ '/tags' | relative_url }}#{{ tag | slugify }}" class="tag">#{{ tag }}</a>
                 {% endfor %}
