@@ -411,10 +411,10 @@ title: Home
                     {% assign max_size = sorted_tags.first.size | times: 1.0 %}
                     {% assign size_ratio = tag_size | divided_by: max_size %}
                     {% assign font_size = size_ratio | times: 0.4 | plus: 0.8 %}
-                    <a href="{{ '/tags' | relative_url }}#{{ tag.name | slugify }}"
+                    <a href="{{ '/tags' | relative_url }}{{ tag.name | slugify }}"
                        class="tag-item"
                        style="--tag-size: {{ font_size }}">
-                        <span class="tag-name">#{{ tag.name }}</span>
+                        <span class="tag-name">{{ tag.name }}</span>
                         <span class="tag-count">{{ tag.size }}</span>
                     </a>
                 {% endfor %}
