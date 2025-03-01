@@ -2,28 +2,197 @@
 layout: default
 ---
 <article class="post">
-    <header class="post-header">
-        <button onclick="window.history.back()" class="back-button">Back</button>
-        <h1>{{ page.title }}</h1>
-        {% if page.description %}
-        <p class="post-description">{{ page.description }}</p>
-        {% endif %}
-        <div class="post-meta">
-            <span class="date-category">
-                <time datetime="{{ page.date | date_to_xmlschema }}">{{ page.date | date: "%B %-d, %Y" }}</time>
-                {% if page.category %} • <a href="{{ '/categories' | relative_url }}#{{ page.category | slugify }}" class="category-link">{{ page.category }}</a>{% endif %}
-            </span>
-        </div>
-        {% if page.tags.size > 0 %}
-        <div class="tags">
-            {% for tag in page.tags %}
-            <a href="{{ '/tags' | relative_url }}#{{ tag | slugify }}" class="tag">{{ tag }}</a>
-            {% endfor %}
-        </div>
-        {% endif %}
-    </header>
+    <div>
+        <header class="post-header">
+            <button onclick="window.history.back()" class="back-button">Back</button>
+            <h1>{{ page.title }}</h1>
+            {% if page.description %}
+            <p class="post-description">{{ page.description }}</p>
+            {% endif %}
+            <div class="post-meta">
+                <span class="date-category">
+                    <time datetime="{{ page.date | date_to_xmlschema }}">{{ page.date | date: "%B %-d, %Y" }}</time>
+                    {% if page.category %} • <a href="{{ '/categories' | relative_url }}#{{ page.category | slugify }}" class="category-link">{{ page.category }}</a>{% endif %}
+                </span>
+            </div>
+            {% if page.tags.size > 0 %}
+            <div class="tags">
+                {% for tag in page.tags %}
+                <a href="{{ '/tags' | relative_url }}#{{ tag | slugify }}" class="tag">#{{ tag }}</a>
+                {% endfor %}
+            </div>
+            {% endif %}
+        </header>
 
-    <div class="post-content">
-        {{ content }}
+        <div class="post-content">
+            {{ content }}
+        </div>
     </div>
+    
+    <aside class="post-outline">
+        <h3>Table of Contents</h3>
+        <ul class="outline-list" id="post-outline-list"></ul>
+    </aside>
 </article>
+
+<script>
+// Add line numbers to code blocks
+document.addEventListener('DOMContentLoaded', function() {
+    // Process code blocks for line numbers
+    document.querySelectorAll('pre code').forEach(function(codeBlock) {
+        // Skip if already processed
+        if (codeBlock.querySelector('.line')) return;
+        
+        // Get the code content
+        const code = codeBlock.innerHTML;
+        
+        // Split by line breaks and wrap each line in a span
+        const lines = code.split('\n');
+        
+        // Filter out empty lines at the end
+        let lastNonEmptyIndex = lines.length - 1;
+        while (lastNonEmptyIndex >= 0 && !lines[lastNonEmptyIndex].trim()) {
+            lastNonEmptyIndex--;
+        }
+        
+        const filteredLines = lines.slice(0, lastNonEmptyIndex + 1);
+        
+        // Create a table for better alignment
+        const table = document.createElement('table');
+        table.className = 'code-table';
+        
+        // Add each line as a table row
+        filteredLines.forEach((line, index) => {
+            const row = document.createElement('tr');
+            
+            // Line number cell
+            const lineNumberCell = document.createElement('td');
+            lineNumberCell.className = 'line-number';
+            lineNumberCell.textContent = index + 1;
+            lineNumberCell.setAttribute('data-line-number', index + 1);
+            
+            // Code content cell
+            const codeCell = document.createElement('td');
+            codeCell.className = 'line-content';
+            codeCell.innerHTML = line || ' '; // Use space for empty lines to maintain height
+            
+            row.appendChild(lineNumberCell);
+            row.appendChild(codeCell);
+            table.appendChild(row);
+        });
+        
+        // Replace the code content with the table
+        codeBlock.innerHTML = '';
+        codeBlock.appendChild(table);
+        
+        // Add copy button to code blocks
+        const pre = codeBlock.parentElement;
+        const language = codeBlock.className.match(/language-([^\s]*)/)?.[1] || '';
+        
+        // Create code header
+        const codeHeader = document.createElement('div');
+        codeHeader.className = 'code-header';
+        
+        // Add language indicator if available
+        if (language) {
+            const languageIndicator = document.createElement('span');
+            languageIndicator.className = 'language-indicator';
+            languageIndicator.textContent = language;
+            codeHeader.appendChild(languageIndicator);
+        }
+        
+        // Create copy button
+        const copyButton = document.createElement('button');
+        copyButton.className = 'copy-code-button';
+        copyButton.textContent = 'Copy';
+        copyButton.addEventListener('click', function() {
+            // Extract code from the table structure
+            const codeLines = Array.from(codeBlock.querySelectorAll('.line-content'))
+                .map(line => line.textContent)
+                .join('\n');
+                
+            navigator.clipboard.writeText(codeLines).then(() => {
+                copyButton.textContent = 'Copied!';
+                setTimeout(() => {
+                    copyButton.textContent = 'Copy';
+                }, 2000);
+            });
+        });
+        
+        codeHeader.appendChild(copyButton);
+        
+        // Insert the header before the pre element
+        pre.parentNode.insertBefore(codeHeader, pre);
+        
+        // Add language indicator if available
+        if (language) {
+            const languageIndicator = document.createElement('div');
+            languageIndicator.className = 'language-indicator';
+            languageIndicator.textContent = language;
+            pre.appendChild(languageIndicator);
+        }
+    });
+    
+    // Generate post outline
+    const postContent = document.querySelector('.post-content');
+    const outlineList = document.getElementById('post-outline-list');
+    
+    if (postContent && outlineList) {
+        const headings = postContent.querySelectorAll('h2, h3, h4');
+        
+        if (headings.length > 0) {
+            headings.forEach((heading, index) => {
+                // Add ID to heading if it doesn't have one
+                if (!heading.id) {
+                    heading.id = `heading-${index}`;
+                }
+                
+                const headingLevel = heading.tagName.toLowerCase();
+                const listItem = document.createElement('li');
+                listItem.className = 'outline-item';
+                
+                const link = document.createElement('a');
+                link.href = `#${heading.id}`;
+                link.className = `outline-link outline-${headingLevel}`;
+                link.textContent = heading.textContent;
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    heading.scrollIntoView({ behavior: 'smooth' });
+                    history.pushState(null, null, `#${heading.id}`);
+                });
+                
+                listItem.appendChild(link);
+                outlineList.appendChild(listItem);
+            });
+            
+            // Highlight active section on scroll
+            const outlineLinks = document.querySelectorAll('.outline-link');
+            const headingElements = Array.from(headings);
+            
+            window.addEventListener('scroll', () => {
+                const scrollPosition = window.scrollY;
+                
+                // Find the current heading
+                let currentHeadingIndex = -1;
+                headingElements.forEach((heading, index) => {
+                    const headingPosition = heading.getBoundingClientRect().top + window.scrollY;
+                    if (scrollPosition >= headingPosition - 100) {
+                        currentHeadingIndex = index;
+                    }
+                });
+                
+                // Update active class
+                outlineLinks.forEach((link, index) => {
+                    link.classList.toggle('active', index === currentHeadingIndex);
+                });
+            });
+            
+            // Trigger scroll event to highlight initial section
+            window.dispatchEvent(new Event('scroll'));
+        } else {
+            // Hide outline if no headings
+            document.querySelector('.post-outline').style.display = 'none';
+        }
+    }
+});
+</script>
