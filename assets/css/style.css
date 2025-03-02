@@ -1824,6 +1824,8 @@ pre {
     box-sizing: border-box;
     padding: 1rem;
     max-width: 100%;
+    max-height: 650px; /* Further increased max-height for vertical scrolling */
+    overflow-y: auto; /* Enable vertical scrolling */
     -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
     margin-left: auto;
     margin-right: auto;
@@ -1839,7 +1841,7 @@ pre code {
     background: none;
     font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace;
     line-height: 1.5;
-    font-size: 0.85rem;
+    font-size: 0.85rem; /* Base font size for code */
     tab-size: 4;
     white-space: pre;
     word-wrap: normal; /* Prevent wrapping of code */
@@ -1863,6 +1865,37 @@ pre code {
     top: 0;
     z-index: 5;
     width: 100%;
+}
+
+/* Code block actions container */
+.code-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+/* Toggle expand/collapse button */
+.toggle-code-height {
+    background-color: transparent;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    padding: 0.25rem 0.5rem;
+    font-size: 0.75rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.toggle-code-height:hover {
+    background-color: var(--accent-color);
+    color: white;
+}
+
+/* Expanded code block */
+.code-expanded {
+    max-height: none !important;
 }
 
 .copy-code-button {
@@ -1899,6 +1932,8 @@ code {
 .highlight {
     position: relative;
     overflow-x: auto; /* Enable horizontal scrolling */
+    overflow-y: auto; /* Enable vertical scrolling */
+    max-height: 650px; /* Further increased max-height for vertical scrolling */
     background-color: var(--code-bg);
     border-radius: 8px;
     max-width: 100%;
@@ -1945,6 +1980,7 @@ code {
     display: flex;
     width: max-content; /* Allow row to expand to fit content */
     min-width: 100%; /* Ensure row is at least as wide as container */
+    position: relative; /* For proper positioning of line numbers */
 }
 
 .line-number {
@@ -1993,7 +2029,7 @@ code {
     box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
 }
 
-/* Code scroll indicator */
+/* Code scroll indicators */
 .code-scroll-indicator {
     text-align: center;
     font-size: 0.7rem;
@@ -2004,12 +2040,40 @@ code {
     margin-bottom: 1rem;
 }
 
+/* Vertical scroll indicator */
+.vertical-scroll-indicator {
+    position: absolute;
+    right: 10px;
+    top: 45px; /* Position below the code header */
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 10px;
+    padding: 4px 10px;
+    font-size: 12px;
+    opacity: 0.8;
+    transition: opacity 0.3s ease;
+    color: var(--text-color);
+    z-index: 5;
+    pointer-events: none; /* Prevent the indicator from interfering with scrolling */
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+    animation: pulse 2s infinite; /* Add a subtle pulsing animation */
+    transform: rotate(90deg);
+    transform-origin: right center;
+}
+
+:root[data-theme="dark"] .vertical-scroll-indicator {
+    background: rgba(255, 255, 255, 0.15);
+    color: rgba(255, 255, 255, 0.9);
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+}
+
 /* Code block wrapper */
 .code-block-wrapper {
     width: 100%;
     max-width: 100%;
     margin: 0 auto;
     overflow-x: auto; /* Allow horizontal scrolling within the wrapper */
+    max-height: 650px; /* Further increased max-height for vertical scrolling */
+    overflow-y: auto; /* Enable vertical scrolling */
     position: relative;
     display: block;
     box-sizing: border-box;
@@ -2108,17 +2172,18 @@ code {
         gap: 0.5rem;
     }
     
-    pre, .highlight {
+    pre, .highlight, .code-block-wrapper {
         max-width: 100%;
         overflow-x: auto;
-        font-size: 0.95rem; /* Match post-content font size */
+        font-size: 0.9rem; /* Slightly smaller font size for medium screens */
         padding: 0.75rem;
         margin-left: auto;
         margin-right: auto;
+        max-height: 550px; /* Further increased max-height for medium screens */
     }
     
     pre code {
-        font-size: 0.95rem; /* Match post-content font size */
+        font-size: 0.85rem; /* Smaller font size for medium screens */
     }
     
     .code-header {
@@ -2285,7 +2350,7 @@ code {
     .post-content pre {
         padding: 0.5rem;
         margin: 1rem 0;
-        font-size: 0.95rem; /* Match post-content font size */
+        font-size: 0.85rem; /* Smaller font size for mobile */
         overflow-x: auto;
         -webkit-overflow-scrolling: touch;
         max-width: 100%;
@@ -2296,7 +2361,7 @@ code {
     }
     
     .post-content pre code {
-        font-size: 0.95rem; /* Match post-content font size */
+        font-size: 0.8rem; /* Even smaller font size for mobile */
     }
     
     .code-header {
@@ -2339,6 +2404,19 @@ code {
 @media (max-width: 480px) {
     .container {
         padding: 0 0.75rem;
+    }
+    
+    /* Adjust code block max-height for small screens */
+    pre, .highlight, .code-block-wrapper {
+        max-height: 450px; /* Further increased max-height for mobile screens */
+        font-size: 0.85rem; /* Even smaller font size for mobile screens */
+    }
+    
+    /* Smaller code font for mobile */
+    @media (max-width: 480px) {
+        pre code {
+            font-size: 0.85rem;
+        }
     }
     
     header {

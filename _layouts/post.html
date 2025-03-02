@@ -55,6 +55,59 @@ document.addEventListener('DOMContentLoaded', function() {
             codeHeader.appendChild(languageIndicator);
         }
         
+        // Create actions container
+        const codeActions = document.createElement('div');
+        codeActions.className = 'code-actions';
+        
+        // Create toggle height button
+        const toggleButton = document.createElement('button');
+        toggleButton.className = 'toggle-code-height';
+        toggleButton.textContent = 'Expand';
+        toggleButton.addEventListener('click', function() {
+            const preElement = pre;
+            const wrapper = preElement.closest('.code-block-wrapper');
+            
+            if (preElement.classList.contains('code-expanded')) {
+                // Collapse
+                preElement.classList.remove('code-expanded');
+                if (wrapper) wrapper.classList.remove('code-expanded');
+                toggleButton.textContent = 'Expand';
+                
+                // Restore responsive max-height and font size
+                const screenWidth = window.innerWidth;
+                if (screenWidth <= 480) {
+                    preElement.style.maxHeight = '450px';
+                    if (wrapper) wrapper.style.maxHeight = '450px';
+                    preElement.style.fontSize = '0.8rem';
+                    if (preElement.querySelector('code')) {
+                        preElement.querySelector('code').style.fontSize = '0.8rem';
+                    }
+                } else if (screenWidth <= 768) {
+                    preElement.style.maxHeight = '550px';
+                    if (wrapper) wrapper.style.maxHeight = '550px';
+                    preElement.style.fontSize = '0.85rem';
+                    if (preElement.querySelector('code')) {
+                        preElement.querySelector('code').style.fontSize = '0.85rem';
+                    }
+                } else {
+                    preElement.style.maxHeight = '650px';
+                    if (wrapper) wrapper.style.maxHeight = '650px';
+                    preElement.style.fontSize = '0.85rem';
+                    if (preElement.querySelector('code')) {
+                        preElement.querySelector('code').style.fontSize = '0.85rem';
+                    }
+                }
+            } else {
+                // Expand
+                preElement.classList.add('code-expanded');
+                if (wrapper) wrapper.classList.add('code-expanded');
+                toggleButton.textContent = 'Collapse';
+            }
+            
+            // Recheck overflow to update indicators
+            checkCodeBlockOverflow();
+        });
+        
         // Create copy button
         const copyButton = document.createElement('button');
         copyButton.className = 'copy-code-button';
@@ -71,7 +124,12 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         });
         
-        codeHeader.appendChild(copyButton);
+        // Add buttons to actions container
+        codeActions.appendChild(toggleButton);
+        codeActions.appendChild(copyButton);
+        
+        // Add actions container to header
+        codeHeader.appendChild(codeActions);
         
         // Insert the header before the pre element
         pre.parentNode.insertBefore(codeHeader, pre);
@@ -148,19 +206,57 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
     
-    // Fix potential overflow issues by checking pre widths
+    // Fix potential overflow issues by checking pre widths and heights
     function checkCodeBlockOverflow() {
         document.querySelectorAll('pre').forEach(pre => {
             // Reset any previous styles that might be causing issues
             pre.style.width = '100%';
             pre.style.maxWidth = '100%';
             pre.style.overflowX = 'auto';
+            pre.style.overflowY = 'auto';
+            
+            // Apply responsive max-height and font size based on screen width if not expanded
+            if (!pre.classList.contains('code-expanded')) {
+                const screenWidth = window.innerWidth;
+                if (screenWidth <= 480) {
+                    pre.style.maxHeight = '450px'; // Mobile screens
+                    pre.style.fontSize = '0.8rem'; // Smaller font for mobile
+                    if (pre.querySelector('code')) {
+                        pre.querySelector('code').style.fontSize = '0.8rem';
+                    }
+                } else if (screenWidth <= 768) {
+                    pre.style.maxHeight = '550px'; // Medium screens
+                    pre.style.fontSize = '0.85rem'; // Smaller font for medium screens
+                    if (pre.querySelector('code')) {
+                        pre.querySelector('code').style.fontSize = '0.85rem';
+                    }
+                } else {
+                    pre.style.maxHeight = '650px'; // Large screens
+                    pre.style.fontSize = '0.85rem'; // Normal font size for large screens
+                    if (pre.querySelector('code')) {
+                        pre.querySelector('code').style.fontSize = '0.85rem';
+                    }
+                }
+            }
             
             // Make sure the wrapper is properly scrollable
             const wrapper = pre.closest('.code-block-wrapper');
             if (wrapper) {
                 wrapper.style.overflowX = 'auto';
+                wrapper.style.overflowY = 'auto';
                 wrapper.style.maxWidth = '100%';
+                
+                // Apply responsive max-height based on screen width if not expanded
+                if (!wrapper.classList.contains('code-expanded')) {
+                    const screenWidth = window.innerWidth;
+                    if (screenWidth <= 480) {
+                        wrapper.style.maxHeight = '450px'; // Mobile screens
+                    } else if (screenWidth <= 768) {
+                        wrapper.style.maxHeight = '550px'; // Medium screens
+                    } else {
+                        wrapper.style.maxHeight = '650px'; // Large screens
+                    }
+                }
             }
             
             // Ensure code content can expand properly
@@ -183,15 +279,15 @@ document.addEventListener('DOMContentLoaded', function() {
                 lineRow.style.minWidth = '100%';
             });
             
-            // If content is wider than container, show scroll indicator
+            // Check for horizontal scrolling
             const containerWidth = pre.parentElement.clientWidth;
             const contentWidth = pre.scrollWidth;
             
             if (contentWidth > containerWidth) {
-                // Add class to indicate scrollable content
+                // Add class to indicate horizontally scrollable content
                 pre.classList.add('has-horizontal-scroll');
                 
-                // Add a scroll indicator if not already present
+                // Add a horizontal scroll indicator if not already present
                 if (!pre.querySelector('.horizontal-scroll-indicator')) {
                     const scrollIndicator = document.createElement('div');
                     scrollIndicator.className = 'horizontal-scroll-indicator';
@@ -199,12 +295,11 @@ document.addEventListener('DOMContentLoaded', function() {
                     
                     pre.appendChild(scrollIndicator);
                     
-                    // Hide the indicator after scrolling
+                    // Hide the indicator after scrolling horizontally
                     pre.addEventListener('scroll', function() {
-                        scrollIndicator.style.opacity = '0';
-                        
-                        // Show again if returned to start
-                        if (pre.scrollLeft === 0) {
+                        if (pre.scrollLeft > 0) { // Only hide when scrolling horizontally
+                            scrollIndicator.style.opacity = '0';
+                        } else if (pre.scrollLeft === 0) {
                             scrollIndicator.style.opacity = '0.7';
                         }
                     });
@@ -218,12 +313,63 @@ document.addEventListener('DOMContentLoaded', function() {
                     indicator.remove();
                 }
             }
+            
+            // Check for vertical scrolling
+            const containerHeight = pre.clientHeight;
+            const contentHeight = pre.scrollHeight;
+            
+            if (contentHeight > containerHeight) {
+                // Add class to indicate vertically scrollable content
+                pre.classList.add('has-vertical-scroll');
+                
+                // Add a vertical scroll indicator if not already present
+                if (!pre.querySelector('.vertical-scroll-indicator')) {
+                    const verticalIndicator = document.createElement('div');
+                    verticalIndicator.className = 'vertical-scroll-indicator';
+                    verticalIndicator.textContent = 'scroll ↓';
+                    
+                    pre.appendChild(verticalIndicator);
+                    
+                    // Hide the indicator when scrolling vertically
+                    pre.addEventListener('scroll', function() {
+                        if (pre.scrollTop > 10) { // Hide when scrolled down
+                            verticalIndicator.style.opacity = '0';
+                        } else if (pre.scrollTop < 10) { // Show when at top
+                            verticalIndicator.style.opacity = '0.7';
+                        }
+                    });
+                }
+            } else {
+                // Remove the indicator if content is not taller than container
+                const verticalIndicator = pre.querySelector('.vertical-scroll-indicator');
+                if (verticalIndicator) {
+                    verticalIndicator.remove();
+                }
+                pre.classList.remove('has-vertical-scroll');
+            }
         });
     }
     
     // Run on load and resize
     checkCodeBlockOverflow();
-    window.addEventListener('resize', checkCodeBlockOverflow);
+    
+    // Debounce function to limit how often the resize handler is called
+    function debounce(func, wait) {
+        let timeout;
+        return function() {
+            const context = this;
+            const args = arguments;
+            clearTimeout(timeout);
+            timeout = setTimeout(() => {
+                func.apply(context, args);
+            }, wait);
+        };
+    }
+    
+    // Add resize listener with debounce to improve performance
+    window.addEventListener('resize', debounce(function() {
+        checkCodeBlockOverflow();
+    }, 250)); // Wait 250ms after resize stops before recalculating
     
     // Fix any text that might be overflowing
     document.querySelectorAll('.post-content p, .post-content li, .post-content h1, .post-content h2, .post-content h3, .post-content h4, .post-content h5, .post-content h6').forEach(element => {
