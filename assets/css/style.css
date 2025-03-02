@@ -1952,28 +1952,17 @@ code {
     position: relative;
 }
 
-/* Copy button wrapper */
-.copy-button-wrapper {
+/* Copy button container and button styling */
+.copy-button-container {
     position: absolute;
     top: 0;
     right: 0;
-    bottom: 0;
-    pointer-events: none;
-    z-index: 100;
-    overflow: visible;
-}
-
-/* Copy button container */
-.copy-button-container {
-    position: sticky;
-    top: 8px;
-    right: 8px;
-    z-index: 1000; /* Ensure it's above everything */
+    padding: 8px;
+    z-index: 1000; /* Ensure it's above everything else */
     pointer-events: none; /* Allow clicks to pass through container */
 }
 
-/* Floating copy button for code blocks */
-.floating-copy-button {
+.copy-button {
     background-color: var(--accent-color);
     color: white;
     border: none;
@@ -1990,33 +1979,38 @@ code {
     pointer-events: auto; /* Ensure button is clickable */
 }
 
-.floating-copy-button:hover {
+.copy-button:hover {
     opacity: 1;
     transform: translateY(-1px);
     box-shadow: 0 3px 8px rgba(0, 0, 0, 0.3);
 }
 
 /* Dark mode specific styling */
-.dark-theme .floating-copy-button {
+.dark-theme .copy-button {
     background-color: #4a9ae1; /* Explicit color for dark mode */
     color: #ffffff;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.4);
     border: 1px solid rgba(255, 255, 255, 0.1); /* Add subtle border */
 }
 
-.dark-theme .floating-copy-button:hover {
+.dark-theme .copy-button:hover {
     background-color: #5aafe1; /* Lighter on hover */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
     border-color: rgba(255, 255, 255, 0.2);
 }
 
-.floating-copy-button svg {
+.copy-button svg {
     width: 14px;
     height: 14px;
 }
 
-.dark-theme .floating-copy-button svg {
+.dark-theme .copy-button svg {
     stroke: #ffffff;
+}
+
+/* For backwards compatibility with any existing floating-copy-button elements */
+.floating-copy-button {
+    display: none; /* Hide any existing floating copy buttons */
 }
 
 .horizontal-scroll-indicator {

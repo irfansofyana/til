@@ -110,25 +110,11 @@ document.addEventListener('DOMContentLoaded', function() {
             checkCodeBlockOverflow();
         });
         
-        // Create copy button
-        const copyButton = document.createElement('button');
-        copyButton.className = 'copy-code-button';
-        copyButton.textContent = 'Copy';
-        copyButton.addEventListener('click', function() {
-            // Get the code content directly
-            const codeText = codeBlock.textContent;
-                
-            navigator.clipboard.writeText(codeText).then(() => {
-                copyButton.textContent = 'Copied!';
-                setTimeout(() => {
-                    copyButton.textContent = 'Copy';
-                }, 2000);
-            });
-        });
+        // IMPORTANT: We don't add a copy button here anymore
+        // Copy button functionality is now entirely handled by copy-code.js
         
-        // Add buttons to actions container
+        // Add toggle button to actions container
         codeActions.appendChild(toggleButton);
-        codeActions.appendChild(copyButton);
         
         // Add actions container to header
         codeHeader.appendChild(codeActions);
@@ -142,8 +128,6 @@ document.addEventListener('DOMContentLoaded', function() {
             wrapper.className = 'code-block-wrapper';
             pre.parentNode.insertBefore(wrapper, pre);
             wrapper.appendChild(pre);
-            
-            // Floating copy button is now handled by copy-code.js
         }
         
         // Special handling for code block to ensure horizontal scrolling works correctly
