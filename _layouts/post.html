@@ -35,6 +35,8 @@ layout: default
 <script>
 // Enhanced code block processing for better responsiveness
 document.addEventListener('DOMContentLoaded', function() {
+    // Highlight blocks are now handled by copy-code.js
+    
     // Process code blocks
     document.querySelectorAll('pre code').forEach(function(codeBlock) {
         // Skip if already processed
@@ -140,6 +142,8 @@ document.addEventListener('DOMContentLoaded', function() {
             wrapper.className = 'code-block-wrapper';
             pre.parentNode.insertBefore(wrapper, pre);
             wrapper.appendChild(pre);
+            
+            // Floating copy button is now handled by copy-code.js
         }
         
         // Special handling for code block to ensure horizontal scrolling works correctly
