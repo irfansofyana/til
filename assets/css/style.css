@@ -1468,7 +1468,7 @@ nav a:hover, .nav-link:hover {
 .home-search-section {
     background-color: var(--section-bg);
     border-radius: 10px;
-    margin: 1rem auto 2rem;
+    margin: 2rem auto 2rem;
     padding: 1.1rem;
     box-shadow: var(--card-shadow);
     border: 1px solid var(--border-color);
@@ -1603,6 +1603,14 @@ nav a:hover, .nav-link:hover {
 }
 
 @media (max-width: 768px) {
+    header {
+        margin-bottom: 1.5rem;
+    }
+    
+    main.container {
+        padding-top: 1rem;
+    }
+    
     .home-wrapper {
         width: 100%;
         padding: 0;
@@ -1616,7 +1624,7 @@ nav a:hover, .nav-link:hover {
     
     .home-search-section {
         padding: 1rem;
-        margin: -0.75rem auto 2rem;
+        margin: 2.5rem auto 2rem;
         width: 100%;
         box-sizing: border-box;
     }
@@ -2329,6 +2337,18 @@ code {
 @media (max-width: 480px) {
     .container {
         padding: 0 0.75rem;
+    }
+    
+    header {
+        margin-bottom: 2rem;
+    }
+    
+    main.container {
+        padding-top: 1.5rem;
+    }
+    
+    .home-content {
+        padding-top: 1rem;
     }
     
     .post-header {
