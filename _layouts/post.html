@@ -80,24 +80,13 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (screenWidth <= 480) {
                     preElement.style.maxHeight = '450px';
                     if (wrapper) wrapper.style.maxHeight = '450px';
-                    preElement.style.fontSize = '0.8rem';
-                    if (preElement.querySelector('code')) {
-                        preElement.querySelector('code').style.fontSize = '0.8rem';
-                    }
                 } else if (screenWidth <= 768) {
                     preElement.style.maxHeight = '550px';
                     if (wrapper) wrapper.style.maxHeight = '550px';
-                    preElement.style.fontSize = '0.85rem';
-                    if (preElement.querySelector('code')) {
-                        preElement.querySelector('code').style.fontSize = '0.85rem';
-                    }
                 } else {
                     preElement.style.maxHeight = '650px';
                     if (wrapper) wrapper.style.maxHeight = '650px';
-                    preElement.style.fontSize = '0.85rem';
-                    if (preElement.querySelector('code')) {
-                        preElement.querySelector('code').style.fontSize = '0.85rem';
-                    }
+                }
                 }
             } else {
                 // Expand
