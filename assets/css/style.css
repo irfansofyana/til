@@ -1841,7 +1841,7 @@ pre code {
     background: none;
     font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace;
     line-height: 1.5;
-    font-size: 0.85rem; /* Base font size for code */
+    font-size: 1em; /* Match surrounding text size */
     tab-size: 4;
     white-space: pre;
     word-wrap: normal; /* Prevent wrapping of code */
@@ -2464,12 +2464,12 @@ code {
         min-width: 2.5em;
         width: 2.5em;
         padding: 0 0.5em;
-        font-size: 0.95rem; /* Match code content font size */
+        font-size: 0.95em; /* Match code content font size */
     }
     
     .post-content .line-content {
         padding: 0 0.5em 0 0.5em;
-        font-size: 0.95rem; /* Match code content font size */
+        font-size: 0.95em; /* Match code content font size */
     }
 }
 
@@ -2481,13 +2481,13 @@ code {
     /* Adjust code block max-height for small screens */
     pre, .highlight, .code-block-wrapper {
         max-height: 450px; /* Further increased max-height for mobile screens */
-        font-size: 0.85rem; /* Even smaller font size for mobile screens */
+        font-size: 1em; /* Match surrounding text size */
     }
     
-    /* Smaller code font for mobile */
+    /* Ensure code font scales with surrounding text */
     @media (max-width: 480px) {
         pre code {
-            font-size: 0.85rem;
+            font-size: 1em; /* Match surrounding text size */
         }
     }
     
