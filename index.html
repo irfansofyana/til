@@ -167,7 +167,7 @@ title: Home
                         const tagLink = document.createElement('a');
                         tagLink.href = `${tagsBaseUrl}#${tag.toLowerCase()}`;
                         tagLink.className = 'tag';
-                        tagLink.innerHTML = highlightText('#' + tag, searchTerm);
+                        tagLink.innerHTML = highlightText(tag, searchTerm);
                         tagsDiv.appendChild(tagLink);
                     });
 
