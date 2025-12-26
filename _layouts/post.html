@@ -4,26 +4,15 @@ layout: default
 <article class="post">
     <div class="post-container">
         <header class="post-header">
-            <div class="post-header-top">
-                <button onclick="window.history.back()" class="back-button">Back</button>
-            </div>
             <h1 class="post-title">{{ page.title }}</h1>
             {% if page.description %}
             <p class="post-description">{{ page.description }}</p>
             {% endif %}
-            <div class="post-meta">
-                <span class="date-category">
-                    <time datetime="{{ page.date | date_to_xmlschema }}">{{ page.date | date: "%B %-d, %Y" }}</time>
-                    {% if page.category %} • <a href="{{ '/categories' | relative_url }}#{{ page.category | slugify }}" class="category-link">{{ page.category }}</a>{% endif %}
-                </span>
+            <div class="post-meta-inline">
+                <time datetime="{{ page.date | date_to_xmlschema }}">{{ page.date | date: "%B %-d, %Y" }}</time>
+                {% if page.category %}<span class="meta-separator">•</span><a href="{{ '/categories' | relative_url }}#{{ page.category | slugify }}" class="category-link">{{ page.category }}</a>{% endif %}
+                {% if page.tags.size > 0 %}{% for tag in page.tags %}<span class="meta-separator">•</span><a href="{{ '/tags' | relative_url }}#{{ tag | slugify }}" class="tag-inline">#{{ tag }}</a>{% endfor %}{% endif %}
             </div>
-            {% if page.tags.size > 0 %}
-            <div class="tags post-tags">
-                {% for tag in page.tags %}
-                <a href="{{ '/tags' | relative_url }}#{{ tag | slugify }}" class="tag">{{ tag }}</a>
-                {% endfor %}
-            </div>
-            {% endif %}
         </header>
 
         <div class="post-content">
@@ -33,338 +22,93 @@ layout: default
 </article>
 
 <script>
-// Enhanced code block processing for better responsiveness
+// Code block processing with integrated copy button
 document.addEventListener('DOMContentLoaded', function() {
-    // Highlight blocks are now handled by copy-code.js
-    
-    // Process code blocks
+    // Initialize Highlight.js
+    if (typeof hljs !== 'undefined') {
+        hljs.highlightAll();
+    }
+
+    // Add code block headers (language indicator + copy button)
     document.querySelectorAll('pre code').forEach(function(codeBlock) {
-        // Skip if already processed
-        if (codeBlock.parentElement.previousElementSibling && codeBlock.parentElement.previousElementSibling.classList.contains('code-header')) return;
-        
         const pre = codeBlock.parentElement;
-        const language = codeBlock.className.match(/language-([^\s]*)/)?.[1] || '';
-        
-        // Create code header
+
+        // Skip if already processed
+        if (pre.dataset.codeProcessed) {
+            return;
+        }
+
+        // Mark as processed
+        pre.dataset.codeProcessed = 'true';
+
+        // Extract language from class name
+        const languageMatch = codeBlock.className.match(/language-(\w+)/);
+        const language = languageMatch ? languageMatch[1] : 'Code';
+
+        // Create code header with language indicator and copy button
         const codeHeader = document.createElement('div');
         codeHeader.className = 'code-header';
-        
-        // Add language indicator if available
-        if (language) {
-            const languageIndicator = document.createElement('span');
-            languageIndicator.className = 'language-indicator';
-            languageIndicator.textContent = language;
-            codeHeader.appendChild(languageIndicator);
-        }
-        
-        // Create actions container
-        const codeActions = document.createElement('div');
-        codeActions.className = 'code-actions';
-        
-        // Create toggle height button
-        const toggleButton = document.createElement('button');
-        toggleButton.className = 'toggle-code-height';
-        toggleButton.textContent = 'Expand';
-        toggleButton.addEventListener('click', function() {
-            const preElement = pre;
-            const wrapper = preElement.closest('.code-block-wrapper');
-            
-            if (preElement.classList.contains('code-expanded')) {
-                // Collapse
-                preElement.classList.remove('code-expanded');
-                if (wrapper) wrapper.classList.remove('code-expanded');
-                toggleButton.textContent = 'Expand';
-                
-                // Restore responsive max-height and font size
-                const screenWidth = window.innerWidth;
-                if (screenWidth <= 480) {
-                    preElement.style.maxHeight = '450px';
-                    if (wrapper) wrapper.style.maxHeight = '450px';
-                } else if (screenWidth <= 768) {
-                    preElement.style.maxHeight = '550px';
-                    if (wrapper) wrapper.style.maxHeight = '550px';
-                } else {
-                    preElement.style.maxHeight = '650px';
-                    if (wrapper) wrapper.style.maxHeight = '650px';
-                }
-                }
-            } else {
-                // Expand
-                preElement.classList.add('code-expanded');
-                if (wrapper) wrapper.classList.add('code-expanded');
-                toggleButton.textContent = 'Collapse';
-            }
-            
-            // Recheck overflow to update indicators
-            checkCodeBlockOverflow();
-        });
-        
-        // IMPORTANT: We don't add a copy button here anymore
-        // Copy button functionality is now entirely handled by copy-code.js
-        
-        // Add toggle button to actions container
-        codeActions.appendChild(toggleButton);
-        
-        // Add actions container to header
-        codeHeader.appendChild(codeActions);
-        
-        // Insert the header before the pre element
+        codeHeader.innerHTML = `
+            <span class="language-indicator">${language}</span>
+            <button class="copy-button" aria-label="Copy code">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                </svg>
+            </button>
+        `;
+
+        // Insert header before pre element
         pre.parentNode.insertBefore(codeHeader, pre);
-        
-        // Add a wrapper div with proper width constraints
-        if (!pre.parentNode.classList.contains('code-block-wrapper')) {
-            const wrapper = document.createElement('div');
-            wrapper.className = 'code-block-wrapper';
-            pre.parentNode.insertBefore(wrapper, pre);
-            wrapper.appendChild(pre);
-        }
-        
-        // Special handling for code block to ensure horizontal scrolling works correctly
-        pre.style.maxWidth = '100%';
-        pre.style.boxSizing = 'border-box';
-        pre.style.overflowX = 'auto';
-        
-        // Ensure code element can expand to its natural width while being scrollable
-        codeBlock.style.display = 'block';
-        codeBlock.style.minWidth = '100%';
-        codeBlock.style.width = 'max-content';
-        codeBlock.style.boxSizing = 'border-box';
-        
-        // Add line numbers if they don't exist yet
-        if (!pre.classList.contains('line-numbers-added')) {
-            // Get code content and split into lines
-            const codeContent = codeBlock.textContent;
-            const codeLines = codeContent.split('\n');
-            
-            // Clear existing code and replace with table layout
-            codeBlock.textContent = '';
-            codeBlock.style.display = 'block';
-            codeBlock.style.width = '100%';
-            
-            // Add each line with line number
-            codeLines.forEach((line, index) => {
-                // Line row
-                const lineRow = document.createElement('div');
-                lineRow.className = 'code-line-row';
-                
-                // Line number
-                const lineNumber = document.createElement('span');
-                lineNumber.className = 'line-number';
-                lineNumber.textContent = index + 1;
-                
-                // Line content
-                const lineContent = document.createElement('span');
-                lineContent.className = 'line-content';
-                lineContent.textContent = line;
-                
-                // Add to row and then to table
-                lineRow.appendChild(lineNumber);
-                lineRow.appendChild(lineContent);
-                codeBlock.appendChild(lineRow);
+
+        // Setup copy button functionality
+        const copyButton = codeHeader.querySelector('.copy-button');
+
+        copyButton.addEventListener('click', function() {
+            // Get the code content
+            let codeText;
+            const codeElement = pre.querySelector('code');
+            if (codeElement) {
+                codeText = codeElement.textContent;
+            } else {
+                codeText = pre.textContent;
+            }
+
+            // Copy to clipboard
+            navigator.clipboard.writeText(codeText).then(() => {
+                // Show success state
+                copyButton.classList.add('copied');
+                copyButton.innerHTML = `
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg>
+                `;
+
+                // Reset after 2 seconds
+                setTimeout(() => {
+                    copyButton.classList.remove('copied');
+                    copyButton.innerHTML = `
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                        </svg>
+                    `;
+                }, 2000);
+            }).catch(err => {
+                console.error('Failed to copy code: ', err);
             });
-            
-            pre.classList.add('line-numbers-added');
-        }
+        });
     });
-    
+
     // Add IDs to headings for direct linking
     const postContent = document.querySelector('.post-content');
-    
     if (postContent) {
         const headings = postContent.querySelectorAll('h2, h3, h4');
-        
-        if (headings.length > 0) {
-            headings.forEach((heading, index) => {
-                // Add ID to heading if it doesn't have one
-                if (!heading.id) {
-                    heading.id = `heading-${index}`;
-                }
-            });
-        }
-    }
-    
-    // Fix potential overflow issues by checking pre widths and heights
-    function checkCodeBlockOverflow() {
-        document.querySelectorAll('pre').forEach(pre => {
-            // Reset any previous styles that might be causing issues
-            pre.style.width = '100%';
-            pre.style.maxWidth = '100%';
-            pre.style.overflowX = 'auto';
-            pre.style.overflowY = 'auto';
-            
-            // Apply responsive max-height and font size based on screen width if not expanded
-            if (!pre.classList.contains('code-expanded')) {
-                const screenWidth = window.innerWidth;
-                if (screenWidth <= 480) {
-                    pre.style.maxHeight = '450px'; // Mobile screens
-                    pre.style.fontSize = '0.8rem'; // Smaller font for mobile
-                    if (pre.querySelector('code')) {
-                        pre.querySelector('code').style.fontSize = '0.8rem';
-                    }
-                } else if (screenWidth <= 768) {
-                    pre.style.maxHeight = '550px'; // Medium screens
-                    pre.style.fontSize = '0.85rem'; // Smaller font for medium screens
-                    if (pre.querySelector('code')) {
-                        pre.querySelector('code').style.fontSize = '0.85rem';
-                    }
-                } else {
-                    pre.style.maxHeight = '650px'; // Large screens
-                    pre.style.fontSize = '0.85rem'; // Normal font size for large screens
-                    if (pre.querySelector('code')) {
-                        pre.querySelector('code').style.fontSize = '0.85rem';
-                    }
-                }
-            }
-            
-            // Make sure the wrapper is properly scrollable
-            const wrapper = pre.closest('.code-block-wrapper');
-            if (wrapper) {
-                wrapper.style.overflowX = 'auto';
-                wrapper.style.overflowY = 'auto';
-                wrapper.style.maxWidth = '100%';
-                
-                // Apply responsive max-height based on screen width if not expanded
-                if (!wrapper.classList.contains('code-expanded')) {
-                    const screenWidth = window.innerWidth;
-                    if (screenWidth <= 480) {
-                        wrapper.style.maxHeight = '450px'; // Mobile screens
-                    } else if (screenWidth <= 768) {
-                        wrapper.style.maxHeight = '550px'; // Medium screens
-                    } else {
-                        wrapper.style.maxHeight = '650px'; // Large screens
-                    }
-                }
-            }
-            
-            // Ensure code content can expand properly
-            const codeBlock = pre.querySelector('code');
-            if (codeBlock) {
-                codeBlock.style.width = 'max-content';
-                codeBlock.style.minWidth = '100%';
-            }
-            
-            // Make sure line-content elements can expand properly
-            pre.querySelectorAll('.line-content').forEach(lineContent => {
-                lineContent.style.width = 'max-content';
-                lineContent.style.minWidth = 'max-content';
-                lineContent.style.flex = '0 0 auto';
-            });
-            
-            // Make sure code-line-row elements can expand properly
-            pre.querySelectorAll('.code-line-row').forEach(lineRow => {
-                lineRow.style.width = 'max-content';
-                lineRow.style.minWidth = '100%';
-            });
-            
-            // Check for horizontal scrolling
-            const containerWidth = pre.parentElement.clientWidth;
-            const contentWidth = pre.scrollWidth;
-            
-            if (contentWidth > containerWidth) {
-                // Add class to indicate horizontally scrollable content
-                pre.classList.add('has-horizontal-scroll');
-                
-                // Add a horizontal scroll indicator if not already present
-                if (!pre.querySelector('.horizontal-scroll-indicator')) {
-                    const scrollIndicator = document.createElement('div');
-                    scrollIndicator.className = 'horizontal-scroll-indicator';
-                    scrollIndicator.textContent = 'scroll →';
-                    
-                    pre.appendChild(scrollIndicator);
-                    
-                    // Hide the indicator after scrolling horizontally
-                    pre.addEventListener('scroll', function() {
-                        if (pre.scrollLeft > 0) { // Only hide when scrolling horizontally
-                            scrollIndicator.style.opacity = '0';
-                        } else if (pre.scrollLeft === 0) {
-                            scrollIndicator.style.opacity = '0.7';
-                        }
-                    });
-                }
-            } else {
-                pre.classList.remove('has-horizontal-scroll');
-                
-                // Remove scroll indicator if exists
-                const indicator = pre.querySelector('.horizontal-scroll-indicator');
-                if (indicator) {
-                    indicator.remove();
-                }
-            }
-            
-            // Check for vertical scrolling
-            const containerHeight = pre.clientHeight;
-            const contentHeight = pre.scrollHeight;
-            
-            if (contentHeight > containerHeight) {
-                // Add class to indicate vertically scrollable content
-                pre.classList.add('has-vertical-scroll');
-                
-                // Add a vertical scroll indicator if not already present
-                if (!pre.querySelector('.vertical-scroll-indicator')) {
-                    const verticalIndicator = document.createElement('div');
-                    verticalIndicator.className = 'vertical-scroll-indicator';
-                    verticalIndicator.textContent = 'scroll ↓';
-                    
-                    pre.appendChild(verticalIndicator);
-                    
-                    // Hide the indicator when scrolling vertically
-                    pre.addEventListener('scroll', function() {
-                        if (pre.scrollTop > 10) { // Hide when scrolled down
-                            verticalIndicator.style.opacity = '0';
-                        } else if (pre.scrollTop < 10) { // Show when at top
-                            verticalIndicator.style.opacity = '0.7';
-                        }
-                    });
-                }
-            } else {
-                // Remove the indicator if content is not taller than container
-                const verticalIndicator = pre.querySelector('.vertical-scroll-indicator');
-                if (verticalIndicator) {
-                    verticalIndicator.remove();
-                }
-                pre.classList.remove('has-vertical-scroll');
+        headings.forEach((heading, index) => {
+            if (!heading.id) {
+                heading.id = `heading-${index}`;
             }
         });
-    }
-    
-    // Run on load and resize
-    checkCodeBlockOverflow();
-    
-    // Debounce function to limit how often the resize handler is called
-    function debounce(func, wait) {
-        let timeout;
-        return function() {
-            const context = this;
-            const args = arguments;
-            clearTimeout(timeout);
-            timeout = setTimeout(() => {
-                func.apply(context, args);
-            }, wait);
-        };
-    }
-    
-    // Add resize listener with debounce to improve performance
-    window.addEventListener('resize', debounce(function() {
-        checkCodeBlockOverflow();
-    }, 250)); // Wait 250ms after resize stops before recalculating
-    
-    // Fix any text that might be overflowing
-    document.querySelectorAll('.post-content p, .post-content li, .post-content h1, .post-content h2, .post-content h3, .post-content h4, .post-content h5, .post-content h6').forEach(element => {
-        element.style.overflowWrap = 'break-word';
-        element.style.wordWrap = 'break-word';
-        element.style.wordBreak = 'break-word';
-        element.style.maxWidth = '100%';
-    });
-    
-    // Make sure the post content container is properly set
-    const postContent = document.querySelector('.post-content');
-    if (postContent) {
-        postContent.style.width = '100%';
-        postContent.style.maxWidth = '100%';
-        postContent.style.overflowX = 'hidden'; // Hide overflow at container level
-        postContent.style.overflowWrap = 'break-word';
-        postContent.style.wordWrap = 'break-word';
-        postContent.style.wordBreak = 'break-word';
     }
 });
 </script>
