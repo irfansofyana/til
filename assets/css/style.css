@@ -93,6 +93,55 @@ body {
     overflow-x: hidden;
 }
 
+/* Typography: Serif for article content only */
+.post-content {
+    font-family: 'Source Serif Pro', 'Merriweather', Georgia, 'Times New Roman', serif;
+    font-size: 1.125rem; /* 18px */
+    line-height: 1.65;
+    max-width: 100%;
+    margin: 0;
+    color: var(--text-color);
+}
+
+.post-content p {
+    margin-bottom: 1.25rem;
+}
+
+.post-content h1, .post-content h2, .post-content h3,
+.post-content h4, .post-content h5, .post-content h6 {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    font-weight: 700;
+    color: var(--text-color);
+    margin-top: 2rem;
+    margin-bottom: 0.75rem;
+    line-height: 1.3;
+}
+
+.post-content h1 { font-size: 2rem; }
+.post-content h2 { font-size: 1.75rem; }
+.post-content h3 { font-size: 1.5rem; }
+.post-content h4 { font-size: 1.25rem; }
+
+.post-content a {
+    color: var(--link-color);
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 3px;
+}
+
+.post-content a:hover {
+    color: var(--link-hover-color);
+    text-decoration-thickness: 2px;
+}
+
+.post-content blockquote {
+    border-left: 4px solid var(--accent-color);
+    padding-left: 1.25rem;
+    margin: 1.5rem 0;
+    font-style: italic;
+    color: var(--secondary-text);
+}
+
 .site-wrapper {
     flex: 1 0 auto;
     display: flex;
@@ -410,9 +459,9 @@ nav .container {
 }
 
 .post-header {
-    margin-bottom: 2.5rem;
+    margin-bottom: 3rem;
     position: relative;
-    padding: 1.5rem 0;
+    padding: 0 2rem 2rem 2rem;
     width: 100%;
     box-sizing: border-box;
     border-bottom: 1px solid var(--border-color);
@@ -420,25 +469,27 @@ nav .container {
 }
 
 .post-header h1, .post-title {
-    margin-bottom: 1rem;
+    margin: 0 0 1.5rem 0;
     color: var(--text-color);
-    font-size: 2.2rem;
-    line-height: 1.3;
+    font-size: 2.75rem;
+    line-height: 1.2;
     font-weight: 800;
+    letter-spacing: -0.02em;
 }
 
 .post-header .post-description {
-    margin-bottom: 1.2rem;
-    color: var(--text-color);
-    font-size: 1.1rem;
-    line-height: 1.5;
+    margin: 0 0 1.5rem 0;
+    color: var(--secondary-text);
+    font-size: 1.15rem;
+    line-height: 1.6;
     max-width: 90%;
 }
 
 .post-header .post-meta {
-    margin-bottom: 1rem;
-    font-size: 0.95rem;
+    margin-bottom: 0.75rem;
+    font-size: 0.875rem;
     color: var(--text-color);
+    opacity: 0.7;
 }
 
 .post-header .date-category {
@@ -473,6 +524,54 @@ nav .container {
 }
 
 .post-header .tag:hover {
+    background-color: var(--tag-hover-bg);
+}
+
+/* Inline meta bar - date, category, and tags all on one line */
+.post-meta-inline {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+}
+
+.post-meta-inline time {
+    color: var(--secondary-text);
+    opacity: 0.75;
+}
+
+.meta-separator {
+    color: var(--secondary-text);
+    opacity: 0.4;
+}
+
+.post-meta-inline .category-link {
+    color: var(--category-text);
+    text-decoration: none;
+    background-color: var(--tag-bg);
+    padding: 0.15rem 0.5rem;
+    border-radius: 4px;
+    border: 1px solid var(--tag-border);
+    transition: all 0.2s ease;
+}
+
+.post-meta-inline .category-link:hover {
+    background-color: var(--tag-hover-bg);
+}
+
+.post-meta-inline .tag-inline {
+    color: var(--tag-text);
+    text-decoration: none;
+    font-size: 0.875rem;
+    background-color: var(--tag-bg);
+    padding: 0.15rem 0.5rem;
+    border-radius: 4px;
+    border: 1px solid var(--tag-border);
+    transition: background-color 0.2s ease;
+}
+
+.post-meta-inline .tag-inline:hover {
     background-color: var(--tag-hover-bg);
 }
 
@@ -1867,52 +1966,6 @@ pre code {
     width: 100%;
 }
 
-/* Code block actions container */
-.code-actions {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-}
-
-/* Toggle expand/collapse button */
-.toggle-code-height {
-    background-color: transparent;
-    border: 1px solid var(--border-color);
-    border-radius: 4px;
-    padding: 0.25rem 0.5rem;
-    font-size: 0.75rem;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    display: flex;
-    align-items: center;
-    gap: 0.25rem;
-}
-
-.toggle-code-height:hover {
-    background-color: var(--accent-color);
-    color: white;
-}
-
-/* Expanded code block */
-.code-expanded {
-    max-height: none !important;
-}
-
-.copy-code-button {
-    background-color: transparent;
-    border: 1px solid var(--border-color);
-    border-radius: 4px;
-    padding: 0.25rem 0.5rem;
-    font-size: 0.75rem;
-    cursor: pointer;
-    transition: all 0.2s ease;
-}
-
-.copy-code-button:hover {
-    background-color: var(--accent-color);
-    color: white;
-}
-
 .language-indicator {
     font-size: 0.75rem;
     color: var(--secondary-text);
@@ -1952,63 +2005,39 @@ code {
     position: relative;
 }
 
-/* Copy button container and button styling */
-.copy-button-container {
-    position: absolute;
-    top: 0;
-    right: 0;
-    padding: 8px;
-    z-index: 1000; /* Ensure it's above everything else */
-    pointer-events: none; /* Allow clicks to pass through container */
-}
-
-.copy-button {
-    background-color: var(--accent-color);
-    color: white;
-    border: none;
+/* Copy button styling - integrated into code header */
+.code-header .copy-button {
+    background: transparent;
+    border: 1px solid var(--border-color);
     border-radius: 4px;
     padding: 0.25rem 0.5rem;
-    font-size: 0.75rem;
     cursor: pointer;
-    transition: all 0.2s ease;
-    opacity: 0.9; /* Increased opacity for better visibility */
     display: flex;
     align-items: center;
-    gap: 0.25rem;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-    pointer-events: auto; /* Ensure button is clickable */
+    justify-content: center;
+    transition: all 0.2s ease;
+    color: var(--secondary-text);
+    gap: 0;
 }
 
-.copy-button:hover {
-    opacity: 1;
-    transform: translateY(-1px);
-    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.3);
+.code-header .copy-button:hover {
+    background: var(--accent-color);
+    color: white;
+    border-color: var(--accent-color);
 }
 
-/* Dark mode specific styling */
-.dark-theme .copy-button {
-    background-color: #4a9ae1; /* Explicit color for dark mode */
-    color: #ffffff;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.4);
-    border: 1px solid rgba(255, 255, 255, 0.1); /* Add subtle border */
+.code-header .copy-button svg {
+    width: 16px;
+    height: 16px;
 }
 
-.dark-theme .copy-button:hover {
-    background-color: #5aafe1; /* Lighter on hover */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
-    border-color: rgba(255, 255, 255, 0.2);
+.code-header .copy-button.copied {
+    background: var(--success-color, #22c55e);
+    color: white;
+    border-color: var(--success-color, #22c55e);
 }
 
-.copy-button svg {
-    width: 14px;
-    height: 14px;
-}
-
-.dark-theme .copy-button svg {
-    stroke: #ffffff;
-}
-
-/* For backwards compatibility with any existing floating-copy-button elements */
+/* For backwards compatibility */
 .floating-copy-button {
     display: none; /* Hide any existing floating copy buttons */
 }
@@ -2177,32 +2206,6 @@ code {
     background-color: #151515;
 }
 
-.copy-code-button {
-    background-color: var(--accent-color);
-    border: none;
-    border-radius: 4px;
-    color: white;
-    padding: 0.4rem 0.8rem;
-    font-size: 0.8rem;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    font-weight: 500;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-    white-space: nowrap;
-    margin-left: 0.5rem;
-}
-
-.copy-code-button:hover {
-    background-color: var(--accent-color-dark, var(--accent-color));
-    transform: translateY(-1px);
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
-}
-
-.copy-code-button:active {
-    transform: translateY(0);
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-}
-
 .language-indicator {
     font-size: 0.75rem;
     color: var(--secondary-text);
@@ -2226,12 +2229,12 @@ code {
     }
     
     .post-header {
-        padding: 1.2rem 1rem;
+        padding: 0 1rem 1.5rem 1rem;
     }
-    
+
     .post-header h1 {
-        font-size: 1.8rem;
-        line-height: 1.3;
+        font-size: 2rem;
+        line-height: 1.2;
     }
     
     .site-subtitle {
@@ -2268,12 +2271,7 @@ code {
         padding: 0.2rem 0.4rem;
         margin-bottom: 0.25rem;
     }
-    
-    .copy-code-button {
-        font-size: 0.7rem;
-        padding: 0.2rem 0.5rem;
-    }
-    
+
     .code-table {
         display: table;
         table-layout: auto;
@@ -2445,12 +2443,7 @@ code {
         padding: 0.15rem 0.3rem;
         max-width: 40%;
     }
-    
-    .copy-code-button {
-        font-size: 0.65rem;
-        padding: 0.15rem 0.4rem;
-    }
-    
+
     code {
         font-size: 0.95em; /* Match post-content font size */
         padding: 0.15em 0.3em;
@@ -2504,12 +2497,12 @@ code {
     }
     
     .post-header {
-        padding: 1rem 0.75rem;
+        padding: 0 0.75rem 1.25rem 0.75rem;
     }
-    
+
     .post-header h1 {
-        font-size: 1.6rem;
-        line-height: 1.3;
+        font-size: 1.75rem;
+        line-height: 1.2;
     }
     
     .post-header .post-description {
@@ -2662,22 +2655,7 @@ code {
         border-top-left-radius: 6px;
         border-top-right-radius: 6px;
     }
-    
-    .copy-code-button {
-        padding: 0.3rem 0.6rem;
-        font-size: 0.7rem;
-        border-radius: 4px;
-        border: 1px solid var(--border-color);
-        background-color: var(--button-bg);
-        color: var(--button-text);
-        cursor: pointer;
-        transition: all 0.2s ease;
-    }
 
-    .copy-code-button:hover {
-        background-color: var(--button-hover-bg);
-    }
-    
     .language-indicator {
         font-size: 0.65rem;
         padding: 0.3rem 0.5rem;
@@ -3122,55 +3100,112 @@ body:has(.home-wrapper) > .container > *:not(.home-wrapper) {
     text-decoration: none;
 }
 
-/* Back button styles */
-.post-header {
-    position: relative;
-    padding: 1.5rem 1.5rem;
-}
-
-.post-header-top {
-    display: flex;
-    justify-content: flex-start;
-    margin-bottom: 1.2rem;
-}
-
-.back-button {
+/* Back link - minimal icon style */
+.back-link {
     display: inline-flex;
     align-items: center;
-    gap: 0.5rem;
-    margin: 0;
-    padding: 0.5rem 0.75rem;
-    font-size: 0.9rem;
-    font-weight: 500;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    margin-bottom: 0.75rem;
+    flex-shrink: 0;
     color: var(--secondary-text);
-    background-color: var(--secondary-bg);
-    border: 1px solid var(--border-color);
+    background: transparent;
     border-radius: 6px;
-    cursor: pointer;
+    text-decoration: none;
     transition: all 0.2s ease;
 }
 
-.back-button::before {
-    content: "";
-    display: inline-block;
-    width: 16px;
-    height: 16px;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cline x1='19' y1='12' x2='5' y2='12'%3E%3C/line%3E%3Cpolyline points='12 19 5 12 12 5'%3E%3C/polyline%3E%3C/svg%3E");
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: contain;
+.back-link svg {
     transition: transform 0.2s ease;
 }
 
-.back-button:hover {
-    color: var(--accent-color);
-    background-color: var(--secondary-bg);
+.back-link:hover {
+    color: var(--text-color);
+    background: var(--code-bg);
 }
 
-.back-button:hover::before {
-    transform: translateX(-3px);
+.back-link:hover svg {
+    transform: translateX(-2px);
 }
 
-.back-button:focus {
-    outline: none;
+.back-link:focus-visible {
+    outline: 2px solid var(--accent-color);
+    outline-offset: 2px;
+}
+
+/* ============================================================================
+   Simplified Code Block Styles for Highlight.js
+   ============================================================================ */
+
+/* Override existing code block styles with simpler version */
+pre {
+    background-color: var(--code-bg);
+    border-radius: 6px;
+    margin: 1.5rem 0;
+    border: 1px solid var(--border-color);
+    padding: 1rem;
+    overflow-x: auto;
+    font-size: 0.875rem;
+    line-height: 1.5;
+}
+
+pre code {
+    font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+    display: block;
+    white-space: pre;
+}
+
+.code-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 1rem;
+    background-color: var(--code-bg);
+    border: 1px solid var(--border-color);
+    border-bottom: none;
+    border-radius: 6px 6px 0 0;
+    font-size: 0.8rem;
+}
+
+.code-header + pre {
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    margin-top: 0;
+}
+
+.language-indicator {
+    font-weight: 600;
+    color: var(--secondary-text);
+    text-transform: capitalize;
+}
+
+.code-block-wrapper {
+    margin: 1.5rem 0;
+}
+
+/* Responsive improvements for typography and code blocks */
+@media (max-width: 768px) {
+    .post-content {
+        font-size: 1rem;
+    }
+
+    pre {
+        font-size: 0.8rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .post-content {
+        font-size: 0.95rem;
+    }
+
+    pre {
+        font-size: 0.75rem;
+    }
+
+    .code-header {
+        padding: 0.4rem 0.75rem;
+        font-size: 0.75rem;
+    }
 }
