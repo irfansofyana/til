@@ -13,7 +13,7 @@ During the year-end holiday, I spent some time learning about and experimenting 
 
 So, what are devcontainers? According to its documentation:
 
-“Dev containers allow you to use a container as a full-featured development environment. They can be used to run an application, separate tools, libraries, or runtimes needed for working with a codebase, and aid in continuous integration and testing. Dev containers can be run locally or remotely, in a private or public cloud, across various supporting tools and editors.”
+> “Dev containers allow you to use a container as a full-featured development environment. They can be used to run an application, separate tools, libraries, or runtimes needed for working with a codebase, and aid in continuous integration and testing. Dev containers can be run locally or remotely, in a private or public cloud, across various supporting tools and editors.”
 
 As described, devcontainers are excellent for provisioning development environments. They let you specify everything a developer needs, including IDE extensions, CLI tools, and programming languages. This significantly improves the developer experience and productivity by enabling programmers to start coding on a project instantly, without the hassle of manually installing tools.
 

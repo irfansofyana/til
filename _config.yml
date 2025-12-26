@@ -8,9 +8,9 @@ url: "https://til.irfansp.dev" # Change this to your site URL
 # Build settings
 future: true
 markdown: kramdown
-highlighter: rouge
+highlighter: none
 kramdown:
-  syntax_highlighter: rouge
+  syntax_highlighter: none
 plugins:
   - jekyll-feed
   - jekyll-seo-tag
